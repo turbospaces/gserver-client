@@ -24,13 +24,19 @@
     <![endif]-->
 </head>
 <body>
+<script src="<c:url value="/resources/js/jquery.min.js" />"></script>
+<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+<script src="<c:url value="/resources/js/kinetic.min.js" />"></script>
+
+<tilesx:useAttribute id="scripts" name="scripts" classname="java.util.List" ignore="true"/>
+<c:forEach var="jsPath" items="${scripts}">
+    <script src="<c:url value="/resources/js/${jsPath}" />"></script>
+</c:forEach>
+
 <tiles:insertAttribute name="header"/>
 <div class="container">
     <tiles:insertAttribute name="body"/>
 </div>
 <tiles:insertAttribute name="footer"/>
-<script src="<c:url value="/resources/js/jquery.min.js" />"></script>
-<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
-<script src="<c:url value="/resources/js/kinetic.min.js" />"></script>
 </body>
 </html>

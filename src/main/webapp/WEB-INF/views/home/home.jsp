@@ -1,18 +1,6 @@
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <ul class="nav">
-                <li class="active">
-                    <a class="brand" href="#">About</a>
-                </li>
-                <li><a href="#">Games</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-            <ul class="nav pull-right">
-                <li>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Log In</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<h1>welcome!!</h1>
+<div id="gameContainer" style="border: 1px coral solid;"></div>
+<script src="<c:url value="/resources/js/games/roulette.js" />"></script>
+<script defer="defer">loadRoulette();</script>

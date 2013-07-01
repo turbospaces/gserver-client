@@ -27,6 +27,7 @@
 <script src="<c:url value="/resources/js/jquery.min.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 <script src="<c:url value="/resources/js/kinetic.min.js" />"></script>
+<script src="<c:url value="/resources/js/json2.js" />"></script>
 
 <tilesx:useAttribute id="scripts" name="scripts" classname="java.util.List" ignore="true"/>
 <c:forEach var="jsPath" items="${scripts}">

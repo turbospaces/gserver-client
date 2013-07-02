@@ -45,7 +45,7 @@
 
             For example, this would serialize Dates as ISO strings.
 
-                Date.prototype.toJSON = function (key) {
+                Date.prototype.toJSON = function (key) {             ["
                     function f(n) {
                         // Format integers to have at least two digits.
                         return n < 10 ? '0' + n : n;

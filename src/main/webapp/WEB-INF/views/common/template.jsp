@@ -11,7 +11,8 @@
 <head>
     <title><tiles:insertAttribute name="title"/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="<c:url value="/resources/css/fuelux.min.css" />" rel="stylesheet" media="screen"/>
+    <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet" media="screen"/>
+    <link href="<c:url value="/resources/css/bootstrap-combobox.css" />" rel="stylesheet" media="screen"/>
 
     <tilesx:useAttribute id="styles" name="styles" classname="java.util.List" ignore="true"/>
     <c:forEach var="cssName" items="${styles}">
@@ -26,7 +27,7 @@
 <body>
 <script src="<c:url value="/resources/js/jquery.min.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
-<script src="<c:url value="/resources/js/fuelux.min.js" />"></script>
+<script src="<c:url value="/resources/js/bootstrap-combobox.js" />"></script>
 <script src="<c:url value="/resources/js/kinetic.min.js" />"></script>
 <script src="<c:url value="/resources/js/json2.js" />"></script>
 

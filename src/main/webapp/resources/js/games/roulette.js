@@ -105,7 +105,7 @@ function drawZeroPositions(numbersMap, offset) {
             y: offset.y / 2,
             text: p.label,
             fontSize: cellTextSize * cellWidth / offset.y,
-            fontFamily: 'Calibri',
+            fontFamily: window.document.fontFamily,
             fontStyle: 'bold',
             fill: 'white'
         });
@@ -148,7 +148,7 @@ function drawStraightPositions(numbersMap, offset) {
                 y: i * cellHeight + cellHeight / 2,
                 text: counter,
                 fontSize: cellTextSize,
-                fontFamily: 'Calibri',
+                fontFamily: window.document.fontFamily,
                 fill: 'white'
             });
             text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
@@ -203,8 +203,8 @@ function drawBigPositions(numbersMap, offset) {
             y: i * cellHeight * 2 + cellHeight,
 
             text: p.label,
-            fontSize: cellTextSize,
-            fontFamily: 'Calibri',
+            fontSize: cellTextSize * 3 / 4,
+            fontFamily: window.document.fontFamily,
             fontStyle: 'bold',
             fill: p.textColor
         });
@@ -236,7 +236,7 @@ function drawDozenPositions(numbersMap, offset) {
             y: i * cellHeight * 4 + cellHeight * 2,
             text: p.label,
             fontSize: cellTextSize,
-            fontFamily: 'Calibri',
+            fontFamily: window.document.fontFamily,
             fontStyle: 'bold',
             fill: 'white'
         });
@@ -267,8 +267,8 @@ function drawColumnOutsidePositions(numbersMap, offset) {
             x: i * cellWidth + cellWidth / 2,
             y: cellHeight / 2,
             text: '2 to 1',
-            fontSize: cellTextSize,
-            fontFamily: 'Calibri',
+            fontSize: cellTextSize * 3 / 4,
+            fontFamily: window.document.fontFamily,
             fontStyle: 'bold',
             fill: 'white'
         });

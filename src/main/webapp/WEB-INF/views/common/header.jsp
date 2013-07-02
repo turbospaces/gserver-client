@@ -29,22 +29,45 @@
         <form class="form-horizontal">
             <div class="control-group">
                 <label class="control-label" for="displayName">Display Name</label>
-                <div class="controls"><input type="text" id="displayName"></div>
+                <div class="controls"><input type="text" id="displayName" required="required"></div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="currencyDiv">Currency</label>
+                <label class="control-label" for="cbCurrency">Currency</label>
                 <div class="controls">
-                    <div id="currencyDiv" class="input-append dropdown combobox">
-                        <input class="span2" type="text">
-                        <button type="button" class="btn" data-toggle="dropdown"><i class="caret"></i></button>
-                        <ul class="dropdown-menu">
-                            <li><a>Item One</a></li>
-                            <li><a>Item Two</a></li>
-                            <li><a>Item Three</a></li>
-                            <li class="divider"></li>
-                            <li><a>Item After Divider</a></li>
-                        </ul>
-                    </div>
+                    <select class="combobox" required="required" id="cbCurrency">
+                        <option value="">Choose a currency</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="GBP">GBP</option>
+                        <option value="UAH">UAH</option>
+                        <option value="RUB">RUB</option>
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="cbLanguage">Language</label>
+                <div class="controls">
+                    <select class="combobox" required="required" id="cbLanguage">
+                        <option value="">Choose a Language</option>
+                        <option value="en">English</option>
+                        <option value="ru">Russian</option>
+                        <option value="uk">Ukrainian</option>
+                        <option value="de">German</option>
+                        <option value="fr">French</option>
+                        <option value="it">Italian</option>
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="disableMusicCheckbox">Music</label>
+                <div class="controls">
+                    <label class="checkbox"><input type="checkbox" id="disableMusicCheckbox">Disable music content</label>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="disableBgMusicCheckbox">Background Music</label>
+                <div class="controls">
+                    <label class="checkbox"><input type="checkbox" id="disableBgMusicCheckbox">Disable background effects content</label>
                 </div>
             </div>
         </form>
@@ -54,3 +77,10 @@
         <a class="btn btn-primary">Save</a>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#cbCurrency').combobox();
+        $('#cbLanguage').combobox();
+    });
+</script>

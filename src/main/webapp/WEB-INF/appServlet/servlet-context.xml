@@ -8,14 +8,15 @@
                                  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
 		                         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 		                         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+    <mvc:annotation-driven/>
+    <mvc:resources location="/resources/" mapping="/resources/**"/>
+    <context:component-scan base-package="com.katesoft.gserver.web"/>
 
-    <context:component-scan base-package="com.katesoft.gserver.games" />
-    <mvc:view-controller path="/" view-name="home"/>
-    <resources mapping="/resources/**" location="/resources/" />
-    <beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+    <beans:bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
         <beans:property name="definitions" value="/WEB-INF/tiles.xml"/>
+        <beans:property name="checkRefresh" value="true"/>
     </beans:bean>
     <beans:bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-        <beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+        <beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
     </beans:bean>
 </beans:beans>

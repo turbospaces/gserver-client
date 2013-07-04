@@ -1,3 +1,6 @@
 /target
 /gserver-client.iml
 /.idea
+/.classpath
+/.project
+/.settings

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="social.cf.locator" class="org.springframework.social.connect.support.ConnectionFactoryRegistry">
+        <property name="connectionFactories">
+            <list>
+                <bean class="org.springframework.social.twitter.connect.TwitterConnectionFactory">
+                    <constructor-arg value="YR571S2JiVBOFyJS5MEg"/>
+                    <constructor-arg value="Kb8hS0luftwCJX3qVoyiLUMfZDtK1EozFoUkjNLUMx4"/>
+                </bean>
+                <bean class="org.springframework.social.facebook.connect.FacebookConnectionFactory">
+                    <constructor-arg value="162886103757745"/>
+                    <constructor-arg value="fa8a9825f555a7a8949ec48fb93bda58"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    <bean id="social.user.connection.repository"
+          class="org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository">
+        <constructor-arg ref="ds"/>
+        <constructor-arg ref="social.cf.locator"/>
+        <constructor-arg ref="security.text.encryptor"/>
+    </bean>
+    <bean id="social.connection.repository"
+          factory-method="createConnectionRepository"
+          factory-bean="social.user.connection.repository"
+          scope="request">
+        <constructor-arg value="#{request.userPrincipal.name}"/>
+        <aop:scoped-proxy proxy-target-class="false"/>
+    </bean>
+    <bean id="signin.adapter" class="com.katesoft.gserver.web.SignInAdapter" autowire="constructor"/>
+    <bean id="social.signin.controller" class="org.springframework.social.connect.web.ProviderSignInController">
+        <constructor-arg name="connectionFactoryLocator" ref="social.cf.locator"/>
+        <constructor-arg name="usersConnectionRepository" ref="social.user.connection.repository"/>
+        <constructor-arg name="signInAdapter" ref="signin.adapter"/>
+    </bean>
+</beans>

@@ -11,4 +11,12 @@
         <put-attribute name="body" value="/WEB-INF/views/home/home.jsp" />
         <put-attribute name="title" value="GServer Demo" />
     </definition>
+    <definition name="signup" extends="default">
+        <put-attribute name="body" value="/WEB-INF/views/sign/signup.jsp" />
+        <put-attribute name="title" value="Sign Up" />
+    </definition>
+    <definition name="signin" extends="default">
+        <put-attribute name="body" value="/WEB-INF/views/sign/signin.jsp" />
+        <put-attribute name="title" value="Sign In" />
+    </definition>
 </tiles-definitions>

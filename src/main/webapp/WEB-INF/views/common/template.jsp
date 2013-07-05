@@ -4,6 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles-extras" prefix="tilesx" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <%@ taglib uri="http://www.springframework.org/spring-social/social/tags" prefix="social" %>
 
 <!DOCTYPE html>
@@ -37,9 +38,7 @@
 </c:forEach>
 
 <tiles:insertAttribute name="header"/>
-<div>
-    <tiles:insertAttribute name="body"/>
-</div>
+<tiles:insertAttribute name="body"/>
 <tiles:insertAttribute name="footer"/>
 </body>
 </html>

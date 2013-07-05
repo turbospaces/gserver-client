@@ -13,8 +13,8 @@
                     <constructor-arg value="Kb8hS0luftwCJX3qVoyiLUMfZDtK1EozFoUkjNLUMx4"/>
                 </bean>
                 <bean class="org.springframework.social.facebook.connect.FacebookConnectionFactory">
-                    <constructor-arg value="162886103757745"/>
-                    <constructor-arg value="fa8a9825f555a7a8949ec48fb93bda58"/>
+                    <constructor-arg value="190386617789109"/>
+                    <constructor-arg value="63375e53a5e0ed441cfac945640c162b"/>
                 </bean>
             </list>
         </property>

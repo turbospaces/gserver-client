@@ -13,7 +13,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" class="fuelux">
 <head>
     <title><tiles:insertAttribute name="title"/></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet" media="screen"/>
     <link href="<c:url value="/resources/css/bootstrap-combobox.css" />" rel="stylesheet" media="screen"/>
 

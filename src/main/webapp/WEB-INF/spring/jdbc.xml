@@ -14,7 +14,6 @@
         <property name="password" value="gserver"/>
     </bean>
     <jdbc:initialize-database data-source="ds" ignore-failures="ALL">
-        <jdbc:script location="classpath:schema.sql"/>
         <jdbc:script location="classpath:/org/springframework/social/connect/jdbc/JdbcUsersConnectionRepository.sql"/>
     </jdbc:initialize-database>
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -23,5 +22,5 @@
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="ds"/>
     </bean>
-    <bean id="account.repository" class="com.katesoft.gserver.repo.JdbcUserAccountRepository" autowire="constructor"/>
+    <bean id="repo" class="com.katesoft.gserver.domain.DomainRepository"/>
 </beans>

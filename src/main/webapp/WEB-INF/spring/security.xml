@@ -9,7 +9,7 @@
     <http use-expressions="true">
         <form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-url="/signin?param.error=bad_credentials"/>
         <logout logout-url="/signout" delete-cookies="JSESSIONID"/>
-        <remember-me key="REMEMBER_ME" token-validity-seconds="864000" />
+        <remember-me key="REMEMBER_ME" token-validity-seconds="864000"/>
 
         <intercept-url pattern="/favicon.ico" access="permitAll"/>
         <intercept-url pattern="/resources/**" access="permitAll"/>
@@ -21,11 +21,8 @@
     </http>
 
     <authentication-manager alias="authenticationManager">
-        <authentication-provider>
-            <password-encoder ref="security.password.encoder" />
-            <jdbc-user-service data-source-ref="ds"
-                               users-by-username-query="select user_name, password, true from Account where user_name = ?"
-                               authorities-by-username-query="select user_name, 'ROLE_USER' from Account where user_name = ?"/>
+        <authentication-provider user-service-ref="repo">
+            <password-encoder ref="security.password.encoder"/>
         </authentication-provider>
     </authentication-manager>
 

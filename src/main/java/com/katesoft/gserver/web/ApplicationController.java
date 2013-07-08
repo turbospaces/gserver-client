@@ -1,5 +1,6 @@
 package com.katesoft.gserver.web;
 
+import com.katesoft.gserver.domain.DomainRepository;
 import com.katesoft.gserver.domain.UserAccount;
 import com.katesoft.gserver.repo.UserAccountRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,11 +22,11 @@ import static org.springframework.util.StringUtils.capitalize;
 
 @Controller
 public class ApplicationController {
-    private UserAccountRepository userAccountRepository;
+    private DomainRepository repository;
 
     @Inject
-    public ApplicationController(UserAccountRepository userAccountRepository) {
-        this.userAccountRepository = userAccountRepository;
+    public ApplicationController(DomainRepository repository) {
+        this.repository = repository;
     }
     @RequestMapping(value="/signin", method=RequestMethod.GET)
     public void signin() {}
@@ -37,15 +38,14 @@ public class ApplicationController {
         }
 
         UserAccount account = new UserAccount(form);
-        boolean created = userAccountRepository.createUserAccount(account);
+        boolean created = repository.saveUserAccount(account);
         if (!created) {
             formBinding.rejectValue("username", "user.duplicateUsername");
             return null;
         }
 
-        User user = account.toUserDetails();
         SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities())
+                new UsernamePasswordAuthenticationToken(account, account.getPassword(), account.getAuthorities())
         );
         ProviderSignInUtils.handlePostSignUp(account.getUserName(), request);
         return "redirect:/";

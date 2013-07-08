@@ -11,7 +11,6 @@ public class SignupForm extends UserAccountBase {
 
         form.setFirstName(userProfile.getFirstName());
         form.setLastName(userProfile.getLastName());
-        form.setUserName(userProfile.getUsername());
         form.setEmail(userProfile.getEmail());
         form.setProvider(connection.getKey().getProviderId());
         form.setProviderUserId(connection.getKey().getProviderUserId());

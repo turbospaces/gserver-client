@@ -1,5 +1,6 @@
 package com.katesoft.gserver.web;
 
+import com.katesoft.gserver.domain.DomainRepository;
 import com.katesoft.gserver.domain.UserAccount;
 import com.katesoft.gserver.repo.UserAccountRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,20 +19,19 @@ import javax.servlet.http.HttpSession;
 
 public class SignInAdapter implements org.springframework.social.connect.web.SignInAdapter {
     private RequestCache requestCache;
-    private UserAccountRepository userAccountRepository;
+    private DomainRepository repository;
 
     @Inject
-    public SignInAdapter(RequestCache requestCache, UserAccountRepository userAccountRepository) {
+    public SignInAdapter(RequestCache requestCache, DomainRepository repository) {
         this.requestCache = requestCache;
-        this.userAccountRepository = userAccountRepository;
+        this.repository = repository;
     }
 
     @Override
     public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
-        UserAccount account = userAccountRepository.findAccountByUsernameOrEmail(userId).get();
-        User user = account.toUserDetails();
+        UserAccount account = repository.loadUserByUsername(userId);
         SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities())
+                new UsernamePasswordAuthenticationToken(account, account.getPassword(), account.getAuthorities())
         );
 
         HttpServletRequest nativeReq = request.getNativeRequest(HttpServletRequest.class);

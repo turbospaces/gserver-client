@@ -9,7 +9,7 @@
     <div class="span4 well">
         <c:if test="${not empty message}">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <div class="alert alert-info">${message}</div
+            <div class="alert alert-info">${message}</div>
         </c:if>
         <div>
             <form:form id="signup" action="${signupUrl}" method="post" modelAttribute="signupForm" cssClass="form-horizontal">

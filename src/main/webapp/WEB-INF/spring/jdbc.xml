@@ -7,4 +7,5 @@
         <property name="connectionFactory" ref="redis.connection.factory"/>
     </bean>
     <bean id="repo" class="com.katesoft.gserver.domain.DomainRepository" autowire="constructor"/>
+    <bean id="token.repo" class="com.katesoft.gserver.web.RedisPersistentTokenRepository" autowire="constructor"/>
 </beans>

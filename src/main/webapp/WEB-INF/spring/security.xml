@@ -9,7 +9,7 @@
     <http use-expressions="true">
         <form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-url="/signin?param.error=bad_credentials"/>
         <logout logout-url="/signout" delete-cookies="JSESSIONID"/>
-        <remember-me key="REMEMBER_ME" token-validity-seconds="864000"/>
+        <remember-me services-ref="remember.me.services" key="mykey"/>
 
         <intercept-url pattern="/favicon.ico" access="permitAll"/>
         <intercept-url pattern="/resources/**" access="permitAll"/>
@@ -21,10 +21,20 @@
     </http>
 
     <authentication-manager alias="authenticationManager">
-        <authentication-provider user-service-ref="user.details.service">
-            <password-encoder ref="security.password.encoder"/>
-        </authentication-provider>
+        <authentication-provider ref="authentication.provider"/>
     </authentication-manager>
+
+    <beans:bean id="remember.me.services" class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
+        <beans:constructor-arg name="key" value="mykey"/>
+        <beans:constructor-arg name="tokenRepository" ref="token.repo"/>
+        <beans:constructor-arg name="userDetailsService" ref="user.details.service"/>
+        <beans:property name="alwaysRemember" value="true"/>
+    </beans:bean>
+
+    <beans:bean id="authentication.provider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <beans:property name="passwordEncoder" ref="security.password.encoder"/>
+        <beans:property name="userDetailsService" ref="user.details.service"/>
+    </beans:bean>
 
     <beans:bean id="user.details.service" class="com.katesoft.gserver.domain.RedisUserDetailsService" autowire="constructor"/>
     <beans:bean id="security.text.encryptor" class="org.springframework.security.crypto.encrypt.Encryptors" factory-method="noOpText"/>

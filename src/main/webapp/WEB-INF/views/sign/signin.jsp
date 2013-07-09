@@ -37,7 +37,9 @@
                     <label class="checkbox">
                         <input id="cbRememberMe"
                                type="checkbox"
-                               name="_spring_security_remember_me">
+                               name="_spring_security_remember_me"
+                               disabled="disabled"
+                               checked="true">
                         <span class="label label-warning">Remember me</span></label>
                     <button type="submit" class="btn btn-info btn-block">Sign In</button>
                 </form>

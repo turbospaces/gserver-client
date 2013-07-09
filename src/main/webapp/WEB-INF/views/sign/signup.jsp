@@ -5,8 +5,8 @@
 
 <c:url value="/signup" var="signupUrl"/>
 <div class="row-fluid">
-    <div class="span3"></div>
-    <div class="span6 well">
+    <div class="span4"></div>
+    <div class="span4 well">
         <c:if test="${not empty message}">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <div class="alert alert-info">${message}</div
@@ -15,16 +15,16 @@
             <form:form id="signup" action="${signupUrl}" method="post" modelAttribute="signupForm" cssClass="form-horizontal">
                 <div class="control-group">
                     <label class="control-label" for="tbUserName">Username:</label>
-                    <div class="controls"><form:input path="userName" type="text" id="tbUserName"/></div>
+                    <div class="controls"><form:input path="username" type="text" id="tbUserName"/></div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="tbFirstName">First Name:</label>
 
-                    <div class="controls"><form:input path="firstName" id="tbFirstName"/></div>
+                    <div class="controls"><form:input path="firstname" id="tbFirstName"/></div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="tbLastName">Last Name:</label>
-                    <div class="controls"><form:input path="lastName" id="tbLastName"/></div>
+                    <div class="controls"><form:input path="lastname" id="tbLastName"/></div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="tbEmail">Email:</label>
@@ -42,5 +42,5 @@
             </form:form>
         </div>
     </div>
-    <div class="span3"></div>
+    <div class="span4"></div>
 </div>

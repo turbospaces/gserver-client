@@ -19,9 +19,8 @@
             </list>
         </property>
     </bean>
-    <bean id="social.user.connection.repository"
-          class="org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository">
-        <constructor-arg ref="ds"/>
+    <bean id="social.user.connection.repository" class="com.katesoft.gserver.domain.support.RedisSocialUsersConnectionRepository">
+        <constructor-arg ref="redis.template"/>
         <constructor-arg ref="social.cf.locator"/>
         <constructor-arg ref="security.text.encryptor"/>
     </bean>

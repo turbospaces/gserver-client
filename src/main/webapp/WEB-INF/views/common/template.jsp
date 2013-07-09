@@ -19,6 +19,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet" media="screen"/>
     <link href="<c:url value="/resources/css/bootstrap-combobox.css" />" rel="stylesheet" media="screen"/>
+    <link href="<c:url value="/resources/css/application.css" />" rel="stylesheet" media="screen"/>
 
     <tilesx:useAttribute id="styles" name="styles" classname="java.util.List" ignore="true"/>
     <c:forEach var="cssName" items="${styles}">

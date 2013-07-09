@@ -2,10 +2,11 @@ package com.katesoft.gserver.web;
 
 import com.katesoft.gserver.domain.DomainRepository;
 import com.katesoft.gserver.domain.UserAccount;
-import com.katesoft.gserver.repo.UserAccountRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
@@ -22,14 +23,17 @@ import static org.springframework.util.StringUtils.capitalize;
 
 @Controller
 public class ApplicationController {
+    private Logger logger = LoggerFactory.getLogger(getClass());
     private DomainRepository repository;
 
     @Inject
     public ApplicationController(DomainRepository repository) {
         this.repository = repository;
     }
-    @RequestMapping(value="/signin", method=RequestMethod.GET)
-    public void signin() {}
+
+    @RequestMapping(value = "/signin", method = RequestMethod.GET)
+    public void signin() {
+    }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signup(SignupForm form, BindingResult formBinding, WebRequest request) {
@@ -38,8 +42,10 @@ public class ApplicationController {
         }
 
         UserAccount account = new UserAccount(form);
-        boolean created = repository.saveUserAccount(account);
-        if (!created) {
+        try {
+            repository.saveUserAccount(account);
+        } catch (DuplicateKeyException e) {
+            logger.error(e.getMessage(), e);
             formBinding.rejectValue("username", "user.duplicateUsername");
             return null;
         }
@@ -47,7 +53,7 @@ public class ApplicationController {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(account, account.getPassword(), account.getAuthorities())
         );
-        ProviderSignInUtils.handlePostSignUp(account.getUserName(), request);
+        ProviderSignInUtils.handlePostSignUp(account.getUsername(), request);
         return "redirect:/";
     }
 

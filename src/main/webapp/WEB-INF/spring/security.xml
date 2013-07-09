@@ -21,11 +21,12 @@
     </http>
 
     <authentication-manager alias="authenticationManager">
-        <authentication-provider user-service-ref="repo">
+        <authentication-provider user-service-ref="user.details.service">
             <password-encoder ref="security.password.encoder"/>
         </authentication-provider>
     </authentication-manager>
 
+    <beans:bean id="user.details.service" class="com.katesoft.gserver.domain.RedisUserDetailsService" autowire="constructor"/>
     <beans:bean id="security.text.encryptor" class="org.springframework.security.crypto.encrypt.Encryptors" factory-method="noOpText"/>
     <beans:bean id="security.password.encoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder" factory-method="getInstance"/>
 </beans:beans>

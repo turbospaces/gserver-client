@@ -46,6 +46,7 @@
                 <p class="lead">Or sign in with social</p>
 
                 <form method="post" id="socialSigninForm">
+                    <input type="hidden" name="scope" value="offline_access,email" />
                     <button type="submit" class="btn btn-block" id="btnSigninFacebook">
                         <img src="<c:url value="/resources/social/sign-in-with-facebook.png"/>"/>
                     </button>

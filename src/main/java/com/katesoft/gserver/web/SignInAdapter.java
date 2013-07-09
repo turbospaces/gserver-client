@@ -1,11 +1,9 @@
 package com.katesoft.gserver.web;
 
-import com.katesoft.gserver.domain.DomainRepository;
+import com.katesoft.gserver.domain.RedisUserDetailsService;
 import com.katesoft.gserver.domain.UserAccount;
-import com.katesoft.gserver.repo.UserAccountRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
@@ -19,17 +17,17 @@ import javax.servlet.http.HttpSession;
 
 public class SignInAdapter implements org.springframework.social.connect.web.SignInAdapter {
     private RequestCache requestCache;
-    private DomainRepository repository;
+    private RedisUserDetailsService userDetailsService;
 
     @Inject
-    public SignInAdapter(RequestCache requestCache, DomainRepository repository) {
+    public SignInAdapter(RequestCache requestCache, RedisUserDetailsService userDetailsService) {
         this.requestCache = requestCache;
-        this.repository = repository;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
     public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
-        UserAccount account = repository.loadUserByUsername(userId);
+        UserAccount account = (UserAccount) userDetailsService.loadUserByUsername(userId);
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(account, account.getPassword(), account.getAuthorities())
         );

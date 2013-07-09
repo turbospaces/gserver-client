@@ -6,6 +6,9 @@
             <outputPatternAsHeader>true</outputPatternAsHeader>
         </encoder>
     </appender>
+    <logger name="com.katesoft.gserver">
+        <level value="DEBUG" />
+    </logger>
     <root>
         <level value="INFO" />
         <appender-ref ref="RootConsoleAppender" />

@@ -7,8 +7,13 @@
     <http pattern="/resources/**" security="none"/>
 
     <http use-expressions="true">
-        <form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-url="/signin?param.error=bad_credentials"/>
-        <logout logout-url="/signout" delete-cookies="JSESSIONID"/>
+        <form-login login-page="/signin"
+                    login-processing-url="/signin/authenticate"
+                    authentication-failure-url="/signin?param.error=bad_credentials"
+                    authentication-success-handler-ref="authentication.success.handler"/>
+
+        <logout logout-url="/signout" delete-cookies="JSESSIONID" />
+        <request-cache ref="http.requests.cache" />
         <remember-me services-ref="remember.me.services" key="mykey"/>
 
         <intercept-url pattern="/favicon.ico" access="permitAll"/>
@@ -24,11 +29,14 @@
         <authentication-provider ref="authentication.provider"/>
     </authentication-manager>
 
-    <beans:bean id="remember.me.services" class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
+    <beans:bean id="remember.me.services" class="com.katesoft.gserver.domain.support.RedisPersistentTokenBasedRememberMeServices">
         <beans:constructor-arg name="key" value="mykey"/>
         <beans:constructor-arg name="tokenRepository" ref="token.repo"/>
         <beans:constructor-arg name="userDetailsService" ref="user.details.service"/>
         <beans:property name="alwaysRemember" value="true"/>
+    </beans:bean>
+    <beans:bean id="authentication.success.handler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+        <beans:property name="requestCache" ref="http.requests.cache"/>
     </beans:bean>
 
     <beans:bean id="authentication.provider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">

@@ -20,7 +20,7 @@
         <put-attribute name="body" value="/WEB-INF/views/sign/signin.jsp" />
         <put-attribute name="title" value="Sign In" />
     </definition>
-    <definition name="game" extends="default">
+    <definition name="playgame" extends="default">
         <put-attribute name="body" value="/WEB-INF/views/game/index.jsp" />
         <put-attribute name="title" value="GamePlay" />
     </definition>

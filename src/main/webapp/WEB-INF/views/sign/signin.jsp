@@ -10,7 +10,7 @@
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <div class="alert alert-error">
                 Your sign in information was incorrect.
-                Please try again or <a href="<c:url value="/signup" />">Sign Up</a>.
+                Please try again or <a href="${signupUrl}">Sign Up</a>.
             </div>
         </c:if>
 
@@ -18,7 +18,7 @@
             <div class="span6">
                 <p class="lead">Sign in with credentials</p>
 
-                <form id="signinForm" action="<c:url value="/signin/authenticate" />" method="post">
+                <form id="signinForm" action="${authenticateUrl}" method="post">
                     <input id="tbLogin"
                            name="j_username"
                            placeholder="Username Or Email"

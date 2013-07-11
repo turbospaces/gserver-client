@@ -38,6 +38,9 @@
 <script src="<c:url value="/resources/js/bootstrap-combobox.js" />"></script>
 <script src="<c:url value="/resources/js/kinetic.min.js" />"></script>
 <script src="<c:url value="/resources/js/json2.js" />"></script>
+<script src="<c:url value="/resources/js/sessvars.js" />"></script>
+<script src="<c:url value="/resources/js/application.js" />"></script>
+<script src="<c:url value="/resources/js/commands.js" />"></script>
 
 <tilesx:useAttribute id="scripts" name="scripts" classname="java.util.List" ignore="true"/>
 <c:forEach var="jsPath" items="${scripts}">

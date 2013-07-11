@@ -9,7 +9,10 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Games<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <c:forEach var="game" items="${games}">
-                            <li><a href="#">${game.displayName}</a></li>
+                            <c:url var="playUrl" value="/playgame">
+                                <c:param name="id" value="${game.primaryKey}" />
+                            </c:url>
+                            <li><a href="${playUrl}">${game.displayName}</a></li>
                         </c:forEach>
                     </ul>
                 </li>

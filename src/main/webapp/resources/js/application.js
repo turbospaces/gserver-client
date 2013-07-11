@@ -1,4 +1,4 @@
-var ui = {
+sessvars.ui = {
     sessionID: null,
     transport: {
         commands: {
@@ -6,21 +6,20 @@ var ui = {
             correlation: {}
         },
         ws: null,
-        init: function (serverURL) {
-            ui.transport.ws = new WebSocket('ws://' + serverURL + '/websockets');
-            ui.transport.ws.onopen = function () {
-                var cookie = $.cookie('SPRING_SECURITY_REMEMBER_ME_COOKIE');
-                login(cookie);
+        init: function (wsToken) {
+            this.ws = new WebSocket(wsToken.url);
+            this.ws.onopen = function () {
+                login(wsToken.token);
             };
-            ui.transport.ws.onclose = function () {
+            this.ws.onclose = function () {
             };
-            ui.transport.ws.onmessage = function (event) {
+            this.ws.onmessage = function (event) {
                 var msg = JSON.parse(event.data);
                 var correlationID = msg.headers.correlationID;
 
-                if (ui.transport.commands.correlation.hasOwnProperty(correlationID)) {
-                    var callback = ui.transport.commands.correlation[correlationID];
-                    delete ui.transport.commands.correlation[correlationID];
+                if (this.commands.correlation.hasOwnProperty(correlationID)) {
+                    var callback = this.commands.correlation[correlationID];
+                    delete this.commands.correlation[correlationID];
 
                     console.debug("received ws message(%s)=%s", correlationID, event.data);
                     callback(msg);
@@ -28,7 +27,7 @@ var ui = {
             };
         },
         sendAsync: function (cmd, callback) {
-            var c = ui.transport.commands.counter;
+            var c = this.commands.counter;
             cmd["headers"] = {
                 "correlationID": "corr-" + c,
                 "sequenceNumber": c,
@@ -37,15 +36,15 @@ var ui = {
             cmd["protocolVersion"] = "0.1";
             cmd["debug"] = true;
 
-            if (ui.sessionID != null) {
+            if (this.sessionID != null) {
                 cmd["headers"]["sessionId"] = ui.sessionID;
             }
 
-            ui.transport.commands.counter++;
+            this.commands.counter++;
             var msg = JSON.stringify(cmd);
             console.debug("sending ws message(%s)={%s}", cmd.headers.correlationID, msg);
-            ui.transport.ws.send(msg);
-            ui.transport.commands.correlation[cmd.headers.correlationID] = callback;
+            this.ws.send(msg);
+            this.commands.correlation[cmd.headers.correlationID] = callback;
         }
     }
 }

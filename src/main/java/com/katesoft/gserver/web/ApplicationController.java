@@ -1,7 +1,9 @@
 package com.katesoft.gserver.web;
 
-import com.katesoft.gserver.domain.DomainRepository;
-import com.katesoft.gserver.domain.UserAccount;
+import com.google.common.collect.ImmutableSet;
+import com.katesoft.gserver.domain.GameBO;
+import com.katesoft.gserver.domain.RedisDomainRepository;
+import com.katesoft.gserver.domain.UserAccountBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -24,10 +26,10 @@ import static org.springframework.util.StringUtils.capitalize;
 @Controller
 public class ApplicationController {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private DomainRepository repository;
+    private RedisDomainRepository repository;
 
     @Inject
-    public ApplicationController(DomainRepository repository) {
+    public ApplicationController(RedisDomainRepository repository) {
         this.repository = repository;
     }
 
@@ -41,7 +43,7 @@ public class ApplicationController {
             return null;
         }
 
-        UserAccount account = new UserAccount(form);
+        UserAccountBO account = new UserAccountBO(form);
         try {
             repository.saveUserAccount(account);
         } catch (DuplicateKeyException e) {
@@ -74,8 +76,8 @@ public class ApplicationController {
     @RequestMapping("/")
     public ModelAndView home() {
         ModelAndView mv = new ModelAndView("home");
-        //model.addAttribute("connectionsToProviders", getConnectionRepository().findAllConnections());
-        //model.addAttribute(accountRepository.findAccountByUsername(currentUser.getName()));
+        ImmutableSet<GameBO> allGames = repository.findAllGames();
+        mv.addObject("games", allGames);
         return mv;
     }
 }

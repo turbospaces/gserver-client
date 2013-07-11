@@ -1,7 +1,7 @@
 package com.katesoft.gserver.web;
 
-import com.katesoft.gserver.domain.RedisUserDetailsService;
-import com.katesoft.gserver.domain.UserAccount;
+import com.katesoft.gserver.domain.UserAccountBO;
+import com.katesoft.gserver.domain.support.RedisUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
@@ -27,7 +27,7 @@ public class SignInAdapter implements org.springframework.social.connect.web.Sig
 
     @Override
     public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
-        UserAccount account = (UserAccount) userDetailsService.loadUserByUsername(userId);
+        UserAccountBO account = (UserAccountBO) userDetailsService.loadUserByUsername(userId);
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(account, account.getPassword(), account.getAuthorities())
         );

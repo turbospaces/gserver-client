@@ -33,6 +33,7 @@
 </head>
 <body>
 <script src="<c:url value="/resources/js/jquery.min.js" />"></script>
+<script src="<c:url value="/resources/js/jquery.cookie.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-combobox.js" />"></script>
 <script src="<c:url value="/resources/js/kinetic.min.js" />"></script>

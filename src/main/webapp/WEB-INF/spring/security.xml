@@ -36,7 +36,7 @@
         <beans:property name="userDetailsService" ref="user.details.service"/>
     </beans:bean>
 
-    <beans:bean id="user.details.service" class="com.katesoft.gserver.domain.RedisUserDetailsService" autowire="constructor"/>
+    <beans:bean id="user.details.service" class="com.katesoft.gserver.domain.support.RedisUserDetailsService" autowire="constructor"/>
     <beans:bean id="security.text.encryptor" class="org.springframework.security.crypto.encrypt.Encryptors" factory-method="noOpText"/>
     <beans:bean id="security.password.encoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder" factory-method="getInstance"/>
 </beans:beans>

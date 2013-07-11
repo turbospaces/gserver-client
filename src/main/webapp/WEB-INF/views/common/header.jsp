@@ -5,7 +5,14 @@
     <div class="navbar-inner">
         <div class="container">
             <ul class="nav pull-right">
-                <li><a href="#">Games</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Games<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <c:forEach var="game" items="${games}">
+                            <li><a href="#">${game.displayName}</a></li>
+                        </c:forEach>
+                    </ul>
+                </li>
                 <security:authorize access="isAuthenticated()">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -13,12 +20,12 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="#settingsModal" data-toggle="modal">Settings</a></li>
-                            <li><a href="<c:url value="/signout"/>">Sign Out</a></li>
+                            <li><a href="${signoutUrl}">Sign Out</a></li>
                         </ul>
                     </li>
                 </security:authorize>
                 <security:authorize access="isAnonymous()">
-                    <li><a href="<c:url value="/signin" />">Sign In</a></li>
+                    <li><a href="${signinUrl}">Sign In</a></li>
                  </security:authorize>
             </ul>
         </div>

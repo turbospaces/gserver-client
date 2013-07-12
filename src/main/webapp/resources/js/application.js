@@ -1,3 +1,7 @@
 sessvars.ui = {
-    sessionID: null
+    sessionID: null,
+    transport: {
+        debugOnServer: true,
+        debugOnClient: true
+    }
 }

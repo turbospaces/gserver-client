@@ -89,9 +89,7 @@ public class ApplicationController {
     }
 
     @RequestMapping(value = "/async/get-ws-url", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    WebsocketLoginToken getWebsocketsUrl(HttpServletRequest request) {
+    public @ResponseBody WebsocketLoginToken getWebsocketsUrl(HttpServletRequest request) {
         final Cookie[] cookies = request.getCookies();
         final String cookieName = rememberMeServices.getCookieName();
         Cookie cookie = Iterables.find(Arrays.asList(cookies), new Predicate<Cookie>() {

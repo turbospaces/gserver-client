@@ -71,7 +71,7 @@ var stage = new Kinetic.Stage({
 });
 var layer = new Kinetic.Layer();
 
-function loadRoulette(stageOffset) {
+function loadGame(stageOffset) {
     stage.setOffset(stageOffset);
     var numbersMap = {};
     var zeroRadius = 3 * cellWidth / 4;
@@ -84,7 +84,6 @@ function loadRoulette(stageOffset) {
     drawColumnOutsidePositions(numbersMap, offset);
     stage.add(layer);
 }
-
 function drawZeroPositions(numbersMap, offset) {
     var zerosGroup = new Kinetic.Group({x: 2 * cellWidth + offset.x, y: 0});
     for (var i = 0; i < 2; i++) {
@@ -163,7 +162,6 @@ function drawStraightPositions(numbersMap, offset) {
     }
     layer.add(numbersGroup);
 }
-
 function drawBigPositions(numbersMap, offset) {
     var bigGroup = new Kinetic.Group({x: 0 + offset.x, y: 0 + offset.y});
     for (var i = 0; i < 6; i++) {
@@ -281,7 +279,6 @@ function drawColumnOutsidePositions(numbersMap, offset) {
     }
     layer.add(columnGroup);
 }
-
 function highlightPositionNumber(g) {
     g.on('mouseover', function () {
         this.setOpacity(cellMouseOverOpacity);

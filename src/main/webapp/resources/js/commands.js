@@ -8,7 +8,7 @@ function login(token) {
         }
     };
     var replyCallback = function (reply) {};
-    sessvars.ui.transport.sendAsync(cmd, replyCallback);
+    transport.sendAsync(cmd, replyCallback);
 }
 
 function openGamePlay(gameId) {
@@ -20,12 +20,13 @@ function openGamePlay(gameId) {
         }
     };
     var replyCallback = function (reply) {
-        ui.sessionID = reply["gserver.OpenGamePlayReply.cmd"].sessionId;
+        var s = reply["gserver.OpenGamePlayReply.cmd"].sessionId;
+        sessvars.ui.sessionID = s;
         console.info(
             "Session(%s) created for game=%s",
-            ui.sessionID,
+            s,
             cmd["gserver.OpenGamePlayCommand.cmd"].gameId
         );
     };
-    sessvars.ui.transport.sendAsync(cmd, replyCallback);
+    transport.sendAsync(cmd, replyCallback);
 }

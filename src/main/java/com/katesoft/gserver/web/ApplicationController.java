@@ -6,7 +6,7 @@ import com.google.common.collect.Iterables;
 import com.katesoft.gserver.domain.GameBO;
 import com.katesoft.gserver.domain.RedisDomainRepository;
 import com.katesoft.gserver.domain.UserAccountBO;
-import com.katesoft.gserver.domain.WebSocketsLoginToken;
+import com.katesoft.gserver.domain.WebsocketLoginToken;
 import com.katesoft.gserver.domain.support.RedisPersistentTokenBasedRememberMeServices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.security.Principal;
 import java.util.Arrays;
 
 import static java.lang.String.format;
@@ -91,7 +89,9 @@ public class ApplicationController {
     }
 
     @RequestMapping(value = "/async/get-ws-url", method = RequestMethod.GET)
-    public @ResponseBody WebSocketsLoginToken getWebsocketsUrl(HttpServletRequest request, HttpServletResponse response, Principal user) {
+    public
+    @ResponseBody
+    WebsocketLoginToken getWebsocketsUrl(HttpServletRequest request) {
         final Cookie[] cookies = request.getCookies();
         final String cookieName = rememberMeServices.getCookieName();
         Cookie cookie = Iterables.find(Arrays.asList(cookies), new Predicate<Cookie>() {
@@ -100,9 +100,7 @@ public class ApplicationController {
                 return input.getName().equals(cookieName);
             }
         });
-
-        WebSocketsLoginToken t = new WebSocketsLoginToken();
-        t.setToken(cookie.getValue());
+        WebsocketLoginToken t = rememberMeServices.encodeWebsocketLoginToken(cookie.getValue());
         t.setUrl("ws://localhost:8190/websockets");
         return t;
     }
@@ -115,7 +113,7 @@ public class ApplicationController {
         return mv;
     }
 
-    @RequestMapping(value = "playgame", method = RequestMethod.GET)
+    @RequestMapping(value = "/playgame", method = RequestMethod.GET)
     public ModelAndView playGame(@RequestParam String id) {
         ModelAndView mv = new ModelAndView("playgame");
         GameBO gameBO = repository.findGame(id).get();

@@ -5,7 +5,7 @@
 <security:authorize access="isAuthenticated()">
     <script type="text/javascript">
         $.getJSON('${getWSUrl}', function (wsToken) {
-            sessvars.ui.transport.init(wsToken);
+            transport.init(wsToken);
         });
     </script>
 </security:authorize>

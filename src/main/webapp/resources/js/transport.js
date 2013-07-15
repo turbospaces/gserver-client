@@ -45,13 +45,13 @@ function Transport(wsToken) {
             }
         };
         var replyCallback = function (reply) {
-            var s = reply["gserver.OpenGamePlayReply.cmd"].sessionId;
-            sessvars.ui.sessionID = s;
-            console.info(
-                "Session(%s) created for game=%s",
-                s,
-                cmd["gserver.OpenGamePlayCommand.cmd"].gameId
-            );
+            var replyCmd = reply["gserver.OpenGamePlayReply.cmd"];
+            sessvars.ui.sessionId = replyCmd.sessionId;
+            sessvars.ui.game.id = gameId;
+            sessvars.ui.game.betLimits = replyCmd.betLimits;
+            sessvars.ui.game.coins = replyCmd.coins;
+
+            console.info("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
         };
         sendAsync(cmd, replyCallback);
     };

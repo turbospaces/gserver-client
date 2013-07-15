@@ -6,9 +6,18 @@
 <script src="<c:url value="/resources/js/kinetic.min.js" />"></script>
 
 <div class="row-fluid">
-    <div class="span2"></div>
-    <div class="span8" id="gameContainer" style="border: 1px coral solid;"></div>
-    <div class="span2"></div>
+    <div class="span3"></div>
+    <div class="span6" id="gameContainer" style="border: 1px coral solid;"></div>
+    <div class="span3"></div>
+</div>
+<div class="row-fluid">
+    <div class="span3"></div>
+    <div class="span6" id="controlsContainer" style="border: 1px coral solid;">
+        <div class="row-fluid">
+            <div class="span2"></div>
+        </div>
+    </div>
+    <div class="span3"></div>
 </div>
 
 <security:authorize access="isAuthenticated()">
@@ -25,6 +34,7 @@
                 if (transport.ws.readyState == 1) {
                     transport.openGamePlay("${game}");
                     loadGame({x: 0, y: 0});
+
                 }
             }, 250);
         });

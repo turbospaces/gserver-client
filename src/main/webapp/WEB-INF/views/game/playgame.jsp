@@ -49,9 +49,9 @@
                     console.warn('still waiting for web-socket connect');
                 }
                 if (transport.ws.readyState == 1) {
+                    transport.login(wsToken);
                     transport.openGamePlay("${game}");
                     loadGame({x: 0, y: 0});
-
                 }
             }, 250);
         });

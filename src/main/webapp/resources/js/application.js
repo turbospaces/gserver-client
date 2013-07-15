@@ -3,10 +3,11 @@ sessvars.ui = {
     game: {
         id: null,
         betLimits: null,
-        coins:null
+        coins: null
     },
     transport: {
         debugOnServer: true,
-        debugOnClient: true
+        debugOnClient: true,
+        operationTimeout: 5000
     }
 }

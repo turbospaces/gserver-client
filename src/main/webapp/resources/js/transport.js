@@ -22,8 +22,36 @@ function Transport(wsToken) {
             }
             ws.send(msg);
             commands.correlation[cmd.headers.correlationID] = callback;
+            return cmd.headers.correlationID;
         }
     })(this.commands, this.ws);
+
+    var sendSync = (function (commands) {
+        return function (cmd, callback) {
+            var retryPeriod = 100;
+            var times = sessvars.ui.transport.operationTimeout / retryPeriod;
+            var done = false;
+
+            var proxyCallback = function (reply) {
+                done = true;
+                callback(reply);
+            };
+            var corrId = sendAsync(cmd, proxyCallback);
+
+            for (var i = 0; i < times; i++) {
+                if (done) break;
+                setTimeout(function () {
+                    console.debug("[iteration-%s] waiting for server response for command=%s", i, corrId);
+                    if (commands.correlation.hasOwnProperty(corrId)) {
+                        done = true;
+                    }
+                }, retryPeriod);
+            }
+            if (!done) {
+                throw "Timeout exception: server didn't respond to command = " + corrId;
+            }
+        }
+    })(this.commands);
 
     this.login = function (wsToken) {
         var cmd = {
@@ -34,8 +62,7 @@ function Transport(wsToken) {
                 "clientPlatform": window.navigator.userAgent
             }
         };
-        sendAsync(cmd, function (reply) {
-        });
+        sendAsync(cmd, function (reply) {});
     };
     this.openGamePlay = function (gameId) {
         var cmd = {
@@ -53,15 +80,10 @@ function Transport(wsToken) {
 
             console.info("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
         };
-        sendAsync(cmd, replyCallback);
+        sendSync(cmd, replyCallback);
     };
-    this.ws.onopen = (function (obj, token) {
-        return function () {
-            obj.login(token);
-        }
-    })(this, wsToken);
-    this.ws.onclose = function () {
-    };
+    this.ws.onopen = function() {};
+    this.ws.onclose = function() {};
     this.ws.onmessage = (function (commands) {
         return function (event) {
             var msg = JSON.parse(event.data);

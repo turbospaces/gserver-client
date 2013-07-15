@@ -12,9 +12,26 @@
 </div>
 <div class="row-fluid">
     <div class="span3"></div>
-    <div class="span6" id="controlsContainer" style="border: 1px coral solid;">
+    <div class="span6" id="controlsContainer">
         <div class="row-fluid">
-            <div class="span2"></div>
+            <div class="span2">
+                <button class="btn btn-info btn-block">Auto</button>
+            </div>
+            <div class="span2">
+                <button class="btn btn-inverse btn-block">Undo</button>
+            </div>
+            <div class="span2">
+                <button class="btn btn-danger btn-block">Clear</button>
+            </div>
+            <div class="span2">
+                <button class="btn btn-success btn-block">Rebet</button>
+            </div>
+            <div class="span2">
+                <button class="btn btn-warning btn-block">Double</button>
+            </div>
+            <div class="span2">
+                <button class="btn btn-primary btn-block">Spin</button>
+            </div>
         </div>
     </div>
     <div class="span3"></div>

@@ -3,45 +3,49 @@ var cellHeight = 42;
 var cellTextSize = cellHeight / 2;
 var cellMouseOverOpacity = 0.75;
 
+var greenColor = 'green';
+var redColor = 'red';
+var blackColor = 'black';
+
 var StraightPositions = {
     number_0: {numbers: [0], label: "0"},
     number_00: {numbers: [-1], label: "00"},
-    number_1: {numbers: [1], bgColor: 'red'},
-    number_2: {numbers: [2], bgColor: 'black'},
-    number_3: {numbers: [3], bgColor: 'red'},
-    number_4: {numbers: [4], bgColor: 'black'},
-    number_5: {numbers: [5], bgColor: 'red'},
-    number_6: {numbers: [6], bgColor: 'black'},
-    number_7: {numbers: [7], bgColor: 'red'},
-    number_8: {numbers: [8], bgColor: 'black'},
-    number_9: {numbers: [9], bgColor: 'red'},
-    number_10: {numbers: [10], bgColor: 'black'},
-    number_11: {numbers: [11], bgColor: 'black'},
-    number_12: {numbers: [12], bgColor: 'red'},
-    number_13: {numbers: [13], bgColor: 'black'},
-    number_14: {numbers: [14], bgColor: 'red'},
-    number_15: {numbers: [15], bgColor: 'black'},
-    number_16: {numbers: [16], bgColor: 'red'},
-    number_17: {numbers: [17], bgColor: 'black'},
-    number_18: {numbers: [18], bgColor: 'red'},
-    number_19: {numbers: [19], bgColor: 'red'},
-    number_20: {numbers: [20], bgColor: 'black'},
-    number_21: {numbers: [21], bgColor: 'red'},
-    number_22: {numbers: [22], bgColor: 'black'},
-    number_23: {numbers: [23], bgColor: 'red'},
-    number_24: {numbers: [24], bgColor: 'black'},
-    number_25: {numbers: [25], bgColor: 'red'},
-    number_26: {numbers: [26], bgColor: 'black'},
-    number_27: {numbers: [27], bgColor: 'red'},
-    number_28: {numbers: [28], bgColor: 'black'},
-    number_29: {numbers: [29], bgColor: 'black'},
-    number_30: {numbers: [30], bgColor: 'red'},
-    number_31: {numbers: [31], bgColor: 'black'},
-    number_32: {numbers: [32], bgColor: 'red'},
-    number_33: {numbers: [33], bgColor: 'black'},
-    number_34: {numbers: [34], bgColor: 'red'},
-    number_35: {numbers: [35], bgColor: 'black'},
-    number_36: {numbers: [36], bgColor: 'red'}
+    number_1: {numbers: [1], bgColor: redColor},
+    number_2: {numbers: [2], bgColor: blackColor},
+    number_3: {numbers: [3], bgColor: redColor},
+    number_4: {numbers: [4], bgColor: blackColor},
+    number_5: {numbers: [5], bgColor: redColor},
+    number_6: {numbers: [6], bgColor: blackColor},
+    number_7: {numbers: [7], bgColor: redColor},
+    number_8: {numbers: [8], bgColor: blackColor},
+    number_9: {numbers: [9], bgColor: redColor},
+    number_10: {numbers: [10], bgColor: blackColor},
+    number_11: {numbers: [11], bgColor: blackColor},
+    number_12: {numbers: [12], bgColor: redColor},
+    number_13: {numbers: [13], bgColor: blackColor},
+    number_14: {numbers: [14], bgColor: redColor},
+    number_15: {numbers: [15], bgColor: blackColor},
+    number_16: {numbers: [16], bgColor: redColor},
+    number_17: {numbers: [17], bgColor: blackColor},
+    number_18: {numbers: [18], bgColor: redColor},
+    number_19: {numbers: [19], bgColor: redColor},
+    number_20: {numbers: [20], bgColor: blackColor},
+    number_21: {numbers: [21], bgColor: redColor},
+    number_22: {numbers: [22], bgColor: blackColor},
+    number_23: {numbers: [23], bgColor: redColor},
+    number_24: {numbers: [24], bgColor: blackColor},
+    number_25: {numbers: [25], bgColor: redColor},
+    number_26: {numbers: [26], bgColor: blackColor},
+    number_27: {numbers: [27], bgColor: redColor},
+    number_28: {numbers: [28], bgColor: blackColor},
+    number_29: {numbers: [29], bgColor: blackColor},
+    number_30: {numbers: [30], bgColor: redColor},
+    number_31: {numbers: [31], bgColor: blackColor},
+    number_32: {numbers: [32], bgColor: redColor},
+    number_33: {numbers: [33], bgColor: blackColor},
+    number_34: {numbers: [34], bgColor: redColor},
+    number_35: {numbers: [35], bgColor: blackColor},
+    number_36: {numbers: [36], bgColor: redColor}
 };
 var OutsidePositions = {
     dozen_1to12: {numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], label: "1st 12"},
@@ -51,8 +55,8 @@ var OutsidePositions = {
     even: {numbers: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36], label: "EVEN", textColor: "white"},
     odd: {numbers: [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35], label: "ODD", textColor: "white"},
 
-    red: {numbers: [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36], label: "RED", textColor: "red"},
-    black: {numbers: [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35], label: "BLACK", textColor: "black"},
+    red: {numbers: [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36], label: "RED", textColor: redColor},
+    black: {numbers: [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35], label: "BLACK", textColor: blackColor},
 
     range_1to18: {numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], label: "1 to 18", textColor: "white"},
     range_19to36: {numbers: [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36], label: "19 to 36", textColor: "white"},
@@ -93,7 +97,7 @@ function drawZeroPositions(numbersMap, offset) {
             y: offset.y,
             radius: offset.y,
             angleDeg: 180,
-            fill: '#336633',
+            fill: greenColor,
             stroke: 'white',
             strokeWidth: 0,
             rotationDeg: -180
@@ -129,7 +133,7 @@ function drawStraightPositions(numbersMap, offset) {
                 y: i * cellHeight,
                 width: cellWidth,
                 height: cellHeight,
-                fill: '#336633',
+                fill: greenColor,
                 stroke: 'white',
                 strokeWidth: 0
             });
@@ -192,7 +196,7 @@ function drawBigPositions(numbersMap, offset) {
             y: i * cellHeight * 2,
             width: cellWidth,
             height: cellHeight * 2,
-            fill: '#336633',
+            fill: greenColor,
             stroke: 'white',
             strokeWidth: 0
         });
@@ -224,7 +228,7 @@ function drawDozenPositions(numbersMap, offset) {
             y: i * cellHeight * 4,
             width: cellWidth,
             height: cellHeight * 4,
-            fill: '#336633',
+            fill: greenColor,
             stroke: 'white',
             strokeWidth: 0
         });
@@ -256,7 +260,7 @@ function drawColumnOutsidePositions(numbersMap, offset) {
             y: 0,
             width: cellWidth,
             height: cellHeight,
-            fill: '#336633',
+            fill: greenColor,
             stroke: 'white',
             strokeWidth: 0
         });

@@ -7,7 +7,6 @@ sessvars.ui = {
     },
     transport: {
         debugOnServer: true,
-        debugOnClient: true,
-        operationTimeout: 5000
+        debugOnClient: true
     }
 }

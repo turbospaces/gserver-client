@@ -44,14 +44,19 @@
     <script type="text/javascript">
         $.getJSON('${getWSUrl}', function (wsToken) {
             var transport = new Transport(wsToken);
+            var game = "${game}";
             setTimeout(function () {
                 if (transport.ws.readyState == 0) {
                     console.warn('still waiting for web-socket connect');
                 }
                 if (transport.ws.readyState == 1) {
                     transport.login(wsToken);
-                    transport.openGamePlay("${game}");
-                    loadGame({x: 0, y: 0});
+                    $
+                    transport.openGamePlay(game).done(function (reply) {
+                        console.info("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
+                        console.info("Loading Game=%s", game);
+                        loadGame({x: 0, y: 0});
+                    });
                 }
             }, 250);
         });

@@ -19,7 +19,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet" media="screen"/>
     <link href="<c:url value="/resources/css/bootstrap-combobox.css" />" rel="stylesheet" media="screen"/>
-    <link href="<c:url value="/resources/css/application.css" />" rel="stylesheet" media="screen"/>
+    <link href="<c:url value="/resources/css/jquery.pnotify.default.css" />" rel="stylesheet" media="screen"/>
 
     <tilesx:useAttribute id="styles" name="styles" classname="java.util.List" ignore="true"/>
     <c:forEach var="cssName" items="${styles}">
@@ -33,6 +33,7 @@
 </head>
 <body>
 <script src="<c:url value="/resources/js/jquery.min.js" />"></script>
+<script src="<c:url value="/resources/js/jquery.pnotify.min.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.cookie.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-combobox.js" />"></script>

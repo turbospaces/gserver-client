@@ -9,4 +9,4 @@ sessvars.ui = {
         debugOnServer: true,
         debugOnClient: true
     }
-}
+};

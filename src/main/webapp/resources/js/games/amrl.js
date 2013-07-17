@@ -76,6 +76,13 @@ var stage = new Kinetic.Stage({
 var layer = new Kinetic.Layer();
 
 function loadGame(stageOffset, transport) {
+    var fail = function (reason) {
+        $.pnotify({
+            title: 'server fault',
+            text: reason.msg,
+            type: 'error'
+        });
+    };
     var promise1 = transport.geti18n('ru',
         [
             'roulette.straight.up',
@@ -91,9 +98,11 @@ function loadGame(stageOffset, transport) {
             'roulette.split.bet',
             'roulette.street.bet',
             'roulette.corner.bet'
-        ]);
-    var promise2 = transport.getRoulettePositionsInfo();
-    $.when(promise1, promise2).done(function(reply1, reply2){});
+        ]).fail(fail);
+    var promise2 = transport.getRoulettePositionsInfo().fail(fail);
+
+    $.when(promise1, promise2).done(function (reply1, reply2) {
+    });
 
     stage.setOffset(stageOffset);
 

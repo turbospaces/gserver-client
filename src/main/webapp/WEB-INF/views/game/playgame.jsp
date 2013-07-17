@@ -52,11 +52,9 @@
                 if (transport.ws.readyState == 1) {
                     transport.login(wsToken);
                     var openGamePlayPromise = transport.openGamePlay(game).done(function (reply) {
-                        console.debug("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
-                        console.debug("Loading Game=%s", game);
+                        console.info("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
                         loadGame({x: 0, y: 0}, transport);
-                    });
-                    $.when(openGamePlayPromise).then(function(reply){});
+                    }).fail(function(reason){});
                 }
             }, 250);
         });

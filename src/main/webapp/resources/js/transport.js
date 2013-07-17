@@ -23,8 +23,8 @@ function Transport(wsToken) {
             };
             cmd["protocolVersion"] = "0.1";
             cmd["debug"] = sessvars.ui.transport.debugOnServer;
-            if (sessvars.ui.sessionId != null) {
-                cmd["headers"]["sessionId"] = sessvars.ui.sessionId;
+            if (sessvars.ui.sessionId) {
+                cmd["sessionId"] = sessvars.ui.sessionId;
             }
             var msg = JSON.stringify(cmd);
             if (sessvars.ui.transport.debugOnClient) {
@@ -95,10 +95,15 @@ function Transport(wsToken) {
                 var def = commands.correlation[correlationID];
                 delete commands.correlation[correlationID];
 
-                if (sessvars.ui.transport.debugOnClient) {
-                    console.debug("received ws message(%s)=%s", correlationID, event.data);
+                if (msg.qualifier.indexOf('Exception') != -1) {
+                    console.warn("received ws fault(%s)=%s", correlationID, event.data);
+                    def.reject(msg);
+                } else {
+                    if (sessvars.ui.transport.debugOnClient) {
+                        console.debug("received ws message(%s)=%s", correlationID, event.data);
+                    }
+                    def.resolve(msg);
                 }
-                def.resolve(msg);
             }
         }
     })(this.commands);

@@ -75,8 +75,28 @@ var stage = new Kinetic.Stage({
 });
 var layer = new Kinetic.Layer();
 
-function loadGame(stageOffset) {
+function loadGame(stageOffset, transport) {
+    var promise1 = transport.geti18n('ru',
+        [
+            'roulette.straight.up',
+            'roulette.outside.bets',
+            'roulette.low.or.high',
+            'roulette.line.bet',
+            'roulette.red.or.black',
+            'roulette.dozen.bet',
+            'roulette.even.or.odd',
+            'roulette.five.number.bet',
+            'roulette.inside.bets',
+            'roulette.column.bet',
+            'roulette.split.bet',
+            'roulette.street.bet',
+            'roulette.corner.bet'
+        ]);
+    var promise2 = transport.getRoulettePositionsInfo();
+    $.when(promise1, promise2).done(function(reply1, reply2){});
+
     stage.setOffset(stageOffset);
+
     var numbersMap = {};
     var zeroRadius = 3 * cellWidth / 4;
     var offset = {x: 0, y: zeroRadius};

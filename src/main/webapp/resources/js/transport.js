@@ -13,7 +13,6 @@ function Transport(wsToken) {
 
     var sendAsync = (function (commands, ws) {
         return function (cmd) {
-            var msg = JSON.stringify(cmd);
             var def = new $.Deferred();
             var promise = def.promise();
 
@@ -27,17 +26,34 @@ function Transport(wsToken) {
             if (sessvars.ui.sessionId != null) {
                 cmd["headers"]["sessionId"] = sessvars.ui.sessionId;
             }
+            var msg = JSON.stringify(cmd);
             if (sessvars.ui.transport.debugOnClient) {
                 console.debug("sending ws message(%s)={%s}", cmd.headers.correlationID, msg);
             }
             ws.send(msg);
-            commands.correlation[cmd.headers.correlationID] = promise;
+            commands.correlation[cmd.headers.correlationID] = def;
             commands.counter++;
 
             return promise;
         }
     })(this.commands, this.ws);
-    this.getI18n = function(keys, callback) {};
+    this.getRoulettePositionsInfo = function () {
+        var cmd = {
+            "qualifier": "gserver.games.roulette.GetRoulettePositionInfoCommand",
+            "gserver.games.roulette.GetRoulettePositionInfoCommand.cmd": ""
+        };
+        return sendAsync(cmd);
+    };
+    this.geti18n = function (locale, keys) {
+        var cmd = {
+            "qualifier": "gserver.Geti18nMessagesCommand",
+            "gserver.Geti18nMessagesCommand.cmd": {
+                "locale": locale,
+                "keys": keys
+            }
+        };
+        return sendAsync(cmd);
+    };
     this.login = function (wsToken) {
         var cmd = {
             "qualifier": "gserver.LoginCommand",
@@ -47,7 +63,7 @@ function Transport(wsToken) {
                 "clientPlatform": window.navigator.userAgent
             }
         };
-        return sendAsync(cmd, callback);
+        sendAsync(cmd);
     };
     this.openGamePlay = function (gameId) {
         var cmd = {
@@ -57,7 +73,7 @@ function Transport(wsToken) {
             }
         };
         var promise = sendAsync(cmd);
-        promise.done(function(reply) {
+        promise.done(function (reply) {
             var replyCmd = reply["gserver.OpenGamePlayReply.cmd"];
             sessvars.ui.sessionId = replyCmd.sessionId;
             sessvars.ui.game.id = gameId;
@@ -66,21 +82,23 @@ function Transport(wsToken) {
         });
         return promise;
     };
-    this.ws.onopen = function () {};
-    this.ws.onclose = function () {};
+    this.ws.onopen = function () {
+    };
+    this.ws.onclose = function () {
+    };
     this.ws.onmessage = (function (commands) {
         return function (event) {
             var msg = JSON.parse(event.data);
             var correlationID = msg.headers.correlationID;
 
             if (commands.correlation.hasOwnProperty(correlationID)) {
-                var promise = commands.correlation[correlationID];
+                var def = commands.correlation[correlationID];
                 delete commands.correlation[correlationID];
 
                 if (sessvars.ui.transport.debugOnClient) {
                     console.debug("received ws message(%s)=%s", correlationID, event.data);
                 }
-                promise.resolve(msg);
+                def.resolve(msg);
             }
         }
     })(this.commands);

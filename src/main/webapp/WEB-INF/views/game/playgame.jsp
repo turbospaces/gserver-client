@@ -51,12 +51,12 @@
                 }
                 if (transport.ws.readyState == 1) {
                     transport.login(wsToken);
-                    $
-                    transport.openGamePlay(game).done(function (reply) {
-                        console.info("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
-                        console.info("Loading Game=%s", game);
-                        loadGame({x: 0, y: 0});
+                    var openGamePlayPromise = transport.openGamePlay(game).done(function (reply) {
+                        console.debug("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
+                        console.debug("Loading Game=%s", game);
+                        loadGame({x: 0, y: 0}, transport);
                     });
+                    $.when(openGamePlayPromise).then(function(reply){});
                 }
             }, 250);
         });

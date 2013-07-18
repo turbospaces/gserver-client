@@ -40,7 +40,7 @@ function Transport(wsToken) {
     this.getRoulettePositionsInfo = function () {
         var cmd = {
             "qualifier": "gserver.games.roulette.GetRoulettePositionInfoCommand",
-            "gserver.games.roulette.GetRoulettePositionInfoCommand.cmd": ""
+            "gserver.games.roulette.GetRoulettePositionInfoCommand.cmd": {}
         };
         return sendAsync(cmd);
     };

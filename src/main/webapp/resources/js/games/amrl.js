@@ -80,7 +80,8 @@ function loadGame(stageOffset, transport) {
         $.pnotify({
             title: 'server fault',
             text: reason.msg,
-            type: 'error'
+            type: 'error',
+            width: '40%'
         });
     };
     var promise1 = transport.geti18n('ru',

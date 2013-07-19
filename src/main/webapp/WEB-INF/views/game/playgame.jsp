@@ -6,13 +6,13 @@
 <script src="<c:url value="/resources/js/kinetic.min.js" />"></script>
 
 <div class="row-fluid">
-    <div class="span3"></div>
-    <div class="span6" id="gameContainer" style="border: 1px coral solid;"></div>
-    <div class="span3"></div>
+    <div class="span2"></div>
+    <div class="span8" id="gameContainer" style="border: 1px coral solid;"></div>
+    <div class="span2" id="gameContainerSupport" style="border: 1px coral solid;"></div>
 </div>
 <div class="row-fluid">
-    <div class="span3"></div>
-    <div class="span6" id="controlsContainer">
+    <div class="span2"></div>
+    <div class="span8" id="controlsContainer">
         <div class="row-fluid">
             <div class="span2">
                 <button class="btn btn-info btn-block">Auto</button>
@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-    <div class="span3"></div>
+    <div class="span2"></div>
 </div>
 
 <security:authorize access="isAuthenticated()">
@@ -45,6 +45,8 @@
         $.getJSON('${getWSUrl}', function (wsToken) {
             var transport = new Transport(wsToken);
             var game = "${game}";
+            var fail = function(reason) {sessvars.ui.serverFault(reason)};
+
             setTimeout(function () {
                 if (transport.ws.readyState == 0) {
                     console.warn('still waiting for web-socket connect');
@@ -54,7 +56,8 @@
                     var openGamePlayPromise = transport.openGamePlay(game).done(function (reply) {
                         console.info("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
                         loadGame({x: 0, y: 0}, transport);
-                    }).fail(function(reason){});
+                        transport.getRoulettePositionsInfo().done(function (reply) {}).fail(fail);
+                    }).fail(fail);
                 }
             }, 250);
         });

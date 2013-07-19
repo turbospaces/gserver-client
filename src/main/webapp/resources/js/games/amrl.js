@@ -74,15 +74,12 @@ var stage = new Kinetic.Stage({
     height: 720
 });
 var layer = new Kinetic.Layer();
+var tooltipLayer = new Kinetic.Layer();
+var numbersMap = {};
 
 function loadGame(stageOffset, transport) {
     var fail = function (reason) {
-        $.pnotify({
-            title: 'server fault',
-            text: reason.msg,
-            type: 'error',
-            width: '40%'
-        });
+        sessvars.ui.serverFault(reason)
     };
     var promise1 = transport.geti18n('ru',
         [
@@ -100,25 +97,39 @@ function loadGame(stageOffset, transport) {
             'roulette.street.bet',
             'roulette.corner.bet'
         ]).fail(fail);
-    var promise2 = transport.getRoulettePositionsInfo().fail(fail);
-
-    $.when(promise1, promise2).done(function (reply1, reply2) {
-    });
-
+    var promise2 = transport.getRoulettePositionsInfo().done(function (reply) {
+        var positions = reply["gserver.games.roulette.GetRoulettePositionInfoReply.cmd"].positions;
+        for (var i = 0; i < positions.length; i++) {
+            var name = positions[i].name;
+            var payout = positions[i].payout;
+        }
+    }).fail(fail);
     stage.setOffset(stageOffset);
 
-    var numbersMap = {};
     var zeroRadius = 3 * cellWidth / 4;
     var offset = {x: 0, y: zeroRadius};
 
-    drawZeroPositions(numbersMap, offset);
-    drawStraightPositions(numbersMap, offset);
-    drawBigPositions(numbersMap, offset);
-    drawDozenPositions(numbersMap, offset);
-    drawColumnOutsidePositions(numbersMap, offset);
+    drawZeroPositions(offset);
+    drawStraightPositions(offset);
+    drawBigPositions(offset);
+    drawDozenPositions(offset);
+    drawColumnOutsidePositions(offset);
     stage.add(layer);
+
+    var tooltip = new Kinetic.Text({
+        text: "",
+        fontFamily: window.document.fontFamily,
+        fontSize: 12,
+        padding: 5,
+        textFill: "white",
+        fill: "black",
+        alpha: 0.75,
+        visible: false
+    });
+    tooltipLayer.add(tooltip);
+    stage.add(tooltipLayer);
 }
-function drawZeroPositions(numbersMap, offset) {
+function drawZeroPositions(offset) {
     var zerosGroup = new Kinetic.Group({x: 2 * cellWidth + offset.x, y: 0});
     for (var i = 0; i < 2; i++) {
         var g = new Kinetic.Group({});
@@ -151,7 +162,7 @@ function drawZeroPositions(numbersMap, offset) {
     }
     layer.add(zerosGroup);
 }
-function drawStraightPositions(numbersMap, offset) {
+function drawStraightPositions(offset) {
     var numbersGroup = new Kinetic.Group({x: 2 * cellWidth + offset.x, y: 0 + offset.y});
     var counter = 0;
     for (var i = 0; i < 12; i++) {
@@ -196,7 +207,7 @@ function drawStraightPositions(numbersMap, offset) {
     }
     layer.add(numbersGroup);
 }
-function drawBigPositions(numbersMap, offset) {
+function drawBigPositions(offset) {
     var bigGroup = new Kinetic.Group({x: 0 + offset.x, y: 0 + offset.y});
     for (var i = 0; i < 6; i++) {
         var p = null;
@@ -244,12 +255,12 @@ function drawBigPositions(numbersMap, offset) {
         text.rotateDeg(90);
         g.add(rect);
         g.add(text);
-        highlightPositionNumbers(g, p, numbersMap);
+        highlightPositionNumbers(g, p);
         bigGroup.add(g);
     }
     layer.add(bigGroup);
 }
-function drawDozenPositions(numbersMap, offset) {
+function drawDozenPositions(offset) {
     var dozenGroup = new Kinetic.Group({x: cellWidth + offset.x, y: 0 + offset.y});
     for (var i = 0; i < 3; i++) {
         var g = new Kinetic.Group({});
@@ -276,12 +287,12 @@ function drawDozenPositions(numbersMap, offset) {
         text.rotateDeg(90);
         g.add(rect);
         g.add(text);
-        highlightPositionNumbers(g, p, numbersMap);
+        highlightPositionNumbers(g, p);
         dozenGroup.add(g);
     }
     layer.add(dozenGroup);
 }
-function drawColumnOutsidePositions(numbersMap, offset) {
+function drawColumnOutsidePositions(offset) {
     var columnGroup = new Kinetic.Group({x: 2 * cellWidth + offset.x, y: 12 * cellHeight + offset.y});
     for (var i = 0; i < 3; i++) {
         var g = new Kinetic.Group({});
@@ -308,25 +319,37 @@ function drawColumnOutsidePositions(numbersMap, offset) {
 
         g.add(rect);
         g.add(text);
-        highlightPositionNumbers(g, p, numbersMap);
+        highlightPositionNumbers(g, p);
         columnGroup.add(g);
     }
     layer.add(columnGroup);
 }
 function highlightPositionNumber(g) {
-    g.on('mouseover', function () {
+    var tooltip = sessvars.ui.tooltip('XXX');
+    g.on('mouseover', function (event) {
+        console.info($(document).height());
+        tooltip.pnotify_display();
+
         this.setOpacity(cellMouseOverOpacity);
         document.body.style.cursor = "pointer";
         layer.draw();
     });
+    g.on('mousemove', function (event) {
+        var mouse = stage.getMousePosition();
+        tooltip.css({
+            'top': mouse.y + stage.getContainer().offsetTop + 20,
+            'left': mouse.x + stage.getContainer().offsetLeft + 20
+        });
+    });
     g.on('mouseout', function () {
+        tooltip.pnotify_remove();
         this.setOpacity(1);
         document.body.style.cursor = "default";
         layer.draw();
     });
 }
-function highlightPositionNumbers(g, selected, numbersMap) {
-    g.on('mouseover', function () {
+function highlightPositionNumbers(g, selected) {
+    g.on('mouseover', function (event) {
         for (var j = 0; j < selected.numbers.length; j++) {
             if (numbersMap.hasOwnProperty(selected.numbers[j])) {
                 numbersMap[selected.numbers[j]].setOpacity(cellMouseOverOpacity);

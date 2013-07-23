@@ -81,23 +81,8 @@ function loadGame(stageOffset, transport) {
     var fail = function (reason) {
         sessvars.ui.serverFault(reason)
     };
-    var promise1 = transport.geti18n('ru',
-        [
-            'roulette.straight.up',
-            'roulette.outside.bets',
-            'roulette.low.or.high',
-            'roulette.line.bet',
-            'roulette.red.or.black',
-            'roulette.dozen.bet',
-            'roulette.even.or.odd',
-            'roulette.five.number.bet',
-            'roulette.inside.bets',
-            'roulette.column.bet',
-            'roulette.split.bet',
-            'roulette.street.bet',
-            'roulette.corner.bet'
-        ]).fail(fail);
-    var promise2 = transport.getRoulettePositionsInfo().done(function (reply) {
+
+    transport.getRoulettePositionsInfo().done(function (reply) {
         var positions = reply["gserver.games.roulette.GetRoulettePositionInfoReply.cmd"].positions;
         for (var i = 0; i < positions.length; i++) {
             var name = positions[i].name;
@@ -325,24 +310,15 @@ function drawColumnOutsidePositions(offset) {
     layer.add(columnGroup);
 }
 function highlightPositionNumber(g) {
-    var tooltip = sessvars.ui.tooltip('XXX');
     g.on('mouseover', function (event) {
-        console.info($(document).height());
-        tooltip.pnotify_display();
-
         this.setOpacity(cellMouseOverOpacity);
         document.body.style.cursor = "pointer";
         layer.draw();
     });
     g.on('mousemove', function (event) {
         var mouse = stage.getMousePosition();
-        tooltip.css({
-            'top': mouse.y + stage.getContainer().offsetTop + 20,
-            'left': mouse.x + stage.getContainer().offsetLeft + 20
-        });
     });
     g.on('mouseout', function () {
-        tooltip.pnotify_remove();
         this.setOpacity(1);
         document.body.style.cursor = "default";
         layer.draw();

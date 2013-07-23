@@ -34,7 +34,6 @@
 <body>
 <script src="<c:url value="/resources/js/jquery.min.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.pnotify.min.js" />"></script>
-<script src="<c:url value="/resources/js/jquery.cookie.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-combobox.js" />"></script>
 <script src="<c:url value="/resources/js/sessvars.js" />"></script>

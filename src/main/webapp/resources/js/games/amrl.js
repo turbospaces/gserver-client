@@ -1,11 +1,20 @@
-var cellWidth = 60;
-var cellHeight = 42;
-var cellTextSize = cellHeight / 2;
+var container1 = $('#gameContainer1');
+//
+// define sizing
+//
+var cellWidth = Math.round(Number(container1.width() / 5));
+var zeroRadius = 3 * cellWidth / 4;
+var cellHeight = Math.round(Number(($(window).height() - zeroRadius) * 0.9 / 13));
 var cellMouseOverOpacity = 0.75;
-
+var stageHeight = 13 * cellHeight + zeroRadius;
+var cellTextSize = cellHeight / 2;
+//
+// define colors
+//
 var greenColor = 'green';
 var redColor = 'red';
 var blackColor = 'black';
+var whiteColor = 'white';
 
 var StraightPositions = {
     number_0: {numbers: [0], label: "0"},
@@ -52,14 +61,14 @@ var OutsidePositions = {
     dozen_13to24: {numbers: [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], label: "2nd 12"},
     dozen_25to36: {numbers: [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36], label: "3rd 12"},
 
-    even: {numbers: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36], label: "EVEN", textColor: "white"},
-    odd: {numbers: [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35], label: "ODD", textColor: "white"},
+    even: {numbers: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36], label: "EVEN", textColor: whiteColor},
+    odd: {numbers: [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35], label: "ODD", textColor: whiteColor},
 
     red: {numbers: [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36], label: "RED", textColor: redColor},
     black: {numbers: [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35], label: "BLACK", textColor: blackColor},
 
-    range_1to18: {numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], label: "1 to 18", textColor: "white"},
-    range_19to36: {numbers: [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36], label: "19 to 36", textColor: "white"},
+    range_1to18: {numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], label: "1 to 18", textColor: whiteColor},
+    range_19to36: {numbers: [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36], label: "19 to 36", textColor: whiteColor},
 
     column_1: {numbers: [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]},
     column_2: {numbers: [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]},
@@ -69,15 +78,15 @@ Object.freeze(StraightPositions);
 Object.freeze(OutsidePositions);
 
 var stage = new Kinetic.Stage({
-    container: 'gameContainer',
-    width: 940,
-    height: 720
+    container: container1.attr('id'),
+    width: container1.width(),
+    height: stageHeight
 });
 var layer = new Kinetic.Layer();
-var tooltipLayer = new Kinetic.Layer();
 var numbersMap = {};
 
 function loadGame(stageOffset, transport) {
+    stage.setOffset(stageOffset);
     var fail = function (reason) {
         sessvars.ui.serverFault(reason)
     };
@@ -89,30 +98,14 @@ function loadGame(stageOffset, transport) {
             var payout = positions[i].payout;
         }
     }).fail(fail);
-    stage.setOffset(stageOffset);
 
-    var zeroRadius = 3 * cellWidth / 4;
     var offset = {x: 0, y: zeroRadius};
-
     drawZeroPositions(offset);
     drawStraightPositions(offset);
     drawBigPositions(offset);
     drawDozenPositions(offset);
     drawColumnOutsidePositions(offset);
     stage.add(layer);
-
-    var tooltip = new Kinetic.Text({
-        text: "",
-        fontFamily: window.document.fontFamily,
-        fontSize: 12,
-        padding: 5,
-        textFill: "white",
-        fill: "black",
-        alpha: 0.75,
-        visible: false
-    });
-    tooltipLayer.add(tooltip);
-    stage.add(tooltipLayer);
 }
 function drawZeroPositions(offset) {
     var zerosGroup = new Kinetic.Group({x: 2 * cellWidth + offset.x, y: 0});
@@ -124,7 +117,7 @@ function drawZeroPositions(offset) {
             radius: offset.y,
             angleDeg: 180,
             fill: greenColor,
-            stroke: 'white',
+            stroke: whiteColor,
             strokeWidth: 0,
             rotationDeg: -180
         });
@@ -136,7 +129,7 @@ function drawZeroPositions(offset) {
             fontSize: cellTextSize * cellWidth / offset.y,
             fontFamily: window.document.fontFamily,
             fontStyle: 'bold',
-            fill: 'white'
+            fill: whiteColor
         });
         text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
         g.add(wedge);
@@ -160,7 +153,7 @@ function drawStraightPositions(offset) {
                 width: cellWidth,
                 height: cellHeight,
                 fill: greenColor,
-                stroke: 'white',
+                stroke: whiteColor,
                 strokeWidth: 0
             });
             var ellipse = new Kinetic.Ellipse({
@@ -178,7 +171,7 @@ function drawStraightPositions(offset) {
                 text: counter,
                 fontSize: cellTextSize,
                 fontFamily: window.document.fontFamily,
-                fill: 'white'
+                fill: whiteColor
             });
             text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
 
@@ -223,7 +216,7 @@ function drawBigPositions(offset) {
             width: cellWidth,
             height: cellHeight * 2,
             fill: greenColor,
-            stroke: 'white',
+            stroke: whiteColor,
             strokeWidth: 0
         });
         var text = new Kinetic.Text({
@@ -255,7 +248,7 @@ function drawDozenPositions(offset) {
             width: cellWidth,
             height: cellHeight * 4,
             fill: greenColor,
-            stroke: 'white',
+            stroke: whiteColor,
             strokeWidth: 0
         });
         var p = OutsidePositions["dozen_" + (i * 12 + 1) + 'to' + ( (i + 1) * 12 )];
@@ -266,7 +259,7 @@ function drawDozenPositions(offset) {
             fontSize: cellTextSize,
             fontFamily: window.document.fontFamily,
             fontStyle: 'bold',
-            fill: 'white'
+            fill: whiteColor
         });
         text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
         text.rotateDeg(90);
@@ -287,7 +280,7 @@ function drawColumnOutsidePositions(offset) {
             width: cellWidth,
             height: cellHeight,
             fill: greenColor,
-            stroke: 'white',
+            stroke: whiteColor,
             strokeWidth: 0
         });
         var p = OutsidePositions["column_" + (i + 1)];
@@ -298,7 +291,7 @@ function drawColumnOutsidePositions(offset) {
             fontSize: cellTextSize * 3 / 4,
             fontFamily: window.document.fontFamily,
             fontStyle: 'bold',
-            fill: 'white'
+            fill: whiteColor
         });
         text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
 

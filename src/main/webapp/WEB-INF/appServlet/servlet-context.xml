@@ -13,12 +13,29 @@
     <context:component-scan base-package="com.katesoft.gserver.web"/>
 
     <beans:bean id="http.requests.cache" class="org.springframework.security.web.savedrequest.HttpSessionRequestCache"/>
-    <beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>
+    <beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <beans:property name="defaultLocale" value="ru"/>
+    </beans:bean>
     <beans:bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
         <beans:property name="definitions" value="/WEB-INF/tiles.xml"/>
         <beans:property name="checkRefresh" value="true"/>
     </beans:bean>
     <beans:bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
+    </beans:bean>
+    <beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <beans:property name="basenames" value="classpath:messages"/>
+        <beans:property name="fileEncodings" value="UTF-8"/>
+        <beans:property name="defaultEncoding" value="UTF-8"/>
+    </beans:bean>
+    <beans:bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <beans:property name="paramName" value="language"/>
+    </beans:bean>
+    <beans:bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping">
+        <beans:property name="interceptors">
+            <beans:list>
+                <beans:ref bean="localeChangeInterceptor"/>
+            </beans:list>
+        </beans:property>
     </beans:bean>
 </beans:beans>

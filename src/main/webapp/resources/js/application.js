@@ -9,6 +9,14 @@ sessvars.ui = {
         debugOnServer: true,
         debugOnClient: true
     },
+    theme: {
+        green : '#468847',
+        background : '#ddd',
+        red : 'red',
+        black : 'black',
+        white: 'white',
+        wheat: 'wheat'
+    },
     serverFault: function (reason) {
         $.pnotify({
             title: 'server fault',

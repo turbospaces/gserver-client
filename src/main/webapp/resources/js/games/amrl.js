@@ -1,4 +1,5 @@
 var container1 = $('#gameContainer1');
+var container2 = $('#gameContainer2');
 //
 // define sizing
 //
@@ -8,67 +9,60 @@ var cellHeight = Math.round(Number(($(window).height() - zeroRadius) * 0.9 / 13)
 var cellMouseOverOpacity = 0.75;
 var stageHeight = 13 * cellHeight + zeroRadius;
 var cellTextSize = cellHeight / 2;
-//
-// define colors
-//
-var greenColor = 'green';
-var redColor = 'red';
-var blackColor = 'black';
-var whiteColor = 'white';
 
 var StraightPositions = {
     number_0: {numbers: [0], label: "0"},
     number_00: {numbers: [-1], label: "00"},
-    number_1: {numbers: [1], bgColor: redColor},
-    number_2: {numbers: [2], bgColor: blackColor},
-    number_3: {numbers: [3], bgColor: redColor},
-    number_4: {numbers: [4], bgColor: blackColor},
-    number_5: {numbers: [5], bgColor: redColor},
-    number_6: {numbers: [6], bgColor: blackColor},
-    number_7: {numbers: [7], bgColor: redColor},
-    number_8: {numbers: [8], bgColor: blackColor},
-    number_9: {numbers: [9], bgColor: redColor},
-    number_10: {numbers: [10], bgColor: blackColor},
-    number_11: {numbers: [11], bgColor: blackColor},
-    number_12: {numbers: [12], bgColor: redColor},
-    number_13: {numbers: [13], bgColor: blackColor},
-    number_14: {numbers: [14], bgColor: redColor},
-    number_15: {numbers: [15], bgColor: blackColor},
-    number_16: {numbers: [16], bgColor: redColor},
-    number_17: {numbers: [17], bgColor: blackColor},
-    number_18: {numbers: [18], bgColor: redColor},
-    number_19: {numbers: [19], bgColor: redColor},
-    number_20: {numbers: [20], bgColor: blackColor},
-    number_21: {numbers: [21], bgColor: redColor},
-    number_22: {numbers: [22], bgColor: blackColor},
-    number_23: {numbers: [23], bgColor: redColor},
-    number_24: {numbers: [24], bgColor: blackColor},
-    number_25: {numbers: [25], bgColor: redColor},
-    number_26: {numbers: [26], bgColor: blackColor},
-    number_27: {numbers: [27], bgColor: redColor},
-    number_28: {numbers: [28], bgColor: blackColor},
-    number_29: {numbers: [29], bgColor: blackColor},
-    number_30: {numbers: [30], bgColor: redColor},
-    number_31: {numbers: [31], bgColor: blackColor},
-    number_32: {numbers: [32], bgColor: redColor},
-    number_33: {numbers: [33], bgColor: blackColor},
-    number_34: {numbers: [34], bgColor: redColor},
-    number_35: {numbers: [35], bgColor: blackColor},
-    number_36: {numbers: [36], bgColor: redColor}
+    number_1: {numbers: [1], bgColor: sessvars.ui.theme.red},
+    number_2: {numbers: [2], bgColor: sessvars.ui.theme.black},
+    number_3: {numbers: [3], bgColor: sessvars.ui.theme.red},
+    number_4: {numbers: [4], bgColor: sessvars.ui.theme.black},
+    number_5: {numbers: [5], bgColor: sessvars.ui.theme.red},
+    number_6: {numbers: [6], bgColor: sessvars.ui.theme.black},
+    number_7: {numbers: [7], bgColor: sessvars.ui.theme.red},
+    number_8: {numbers: [8], bgColor: sessvars.ui.theme.black},
+    number_9: {numbers: [9], bgColor: sessvars.ui.theme.red},
+    number_10: {numbers: [10], bgColor: sessvars.ui.theme.black},
+    number_11: {numbers: [11], bgColor: sessvars.ui.theme.black},
+    number_12: {numbers: [12], bgColor: sessvars.ui.theme.red},
+    number_13: {numbers: [13], bgColor: sessvars.ui.theme.black},
+    number_14: {numbers: [14], bgColor: sessvars.ui.theme.red},
+    number_15: {numbers: [15], bgColor: sessvars.ui.theme.black},
+    number_16: {numbers: [16], bgColor: sessvars.ui.theme.red},
+    number_17: {numbers: [17], bgColor: sessvars.ui.theme.black},
+    number_18: {numbers: [18], bgColor: sessvars.ui.theme.red},
+    number_19: {numbers: [19], bgColor: sessvars.ui.theme.red},
+    number_20: {numbers: [20], bgColor: sessvars.ui.theme.black},
+    number_21: {numbers: [21], bgColor: sessvars.ui.theme.red},
+    number_22: {numbers: [22], bgColor: sessvars.ui.theme.black},
+    number_23: {numbers: [23], bgColor: sessvars.ui.theme.red},
+    number_24: {numbers: [24], bgColor: sessvars.ui.theme.black},
+    number_25: {numbers: [25], bgColor: sessvars.ui.theme.red},
+    number_26: {numbers: [26], bgColor: sessvars.ui.theme.black},
+    number_27: {numbers: [27], bgColor: sessvars.ui.theme.red},
+    number_28: {numbers: [28], bgColor: sessvars.ui.theme.black},
+    number_29: {numbers: [29], bgColor: sessvars.ui.theme.black},
+    number_30: {numbers: [30], bgColor: sessvars.ui.theme.red},
+    number_31: {numbers: [31], bgColor: sessvars.ui.theme.black},
+    number_32: {numbers: [32], bgColor: sessvars.ui.theme.red},
+    number_33: {numbers: [33], bgColor: sessvars.ui.theme.black},
+    number_34: {numbers: [34], bgColor: sessvars.ui.theme.red},
+    number_35: {numbers: [35], bgColor: sessvars.ui.theme.black},
+    number_36: {numbers: [36], bgColor: sessvars.ui.theme.red}
 };
 var OutsidePositions = {
     dozen_1to12: {numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], label: "1st 12"},
     dozen_13to24: {numbers: [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], label: "2nd 12"},
     dozen_25to36: {numbers: [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36], label: "3rd 12"},
 
-    even: {numbers: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36], label: "EVEN", textColor: whiteColor},
-    odd: {numbers: [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35], label: "ODD", textColor: whiteColor},
+    even: {numbers: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36], label: "EVEN", textColor: sessvars.ui.theme.white},
+    odd: {numbers: [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35], label: "ODD", textColor: sessvars.ui.theme.white},
 
-    red: {numbers: [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36], label: "RED", textColor: redColor},
-    black: {numbers: [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35], label: "BLACK", textColor: blackColor},
+    red: {numbers: [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36], label: "RED", textColor: sessvars.ui.theme.red},
+    black: {numbers: [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35], label: "BLACK", textColor: sessvars.ui.theme.black},
 
-    range_1to18: {numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], label: "1 to 18", textColor: whiteColor},
-    range_19to36: {numbers: [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36], label: "19 to 36", textColor: whiteColor},
+    range_1to18: {numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], label: "1 to 18", textColor: sessvars.ui.theme.white},
+    range_19to36: {numbers: [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36], label: "19 to 36", textColor: sessvars.ui.theme.white},
 
     column_1: {numbers: [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]},
     column_2: {numbers: [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]},
@@ -82,11 +76,16 @@ var stage = new Kinetic.Stage({
     width: container1.width(),
     height: stageHeight
 });
+var supportStage = new Kinetic.Stage({
+    container: container2.attr('id'),
+    width: container2.width(),
+    height: stageHeight
+});
 var layer = new Kinetic.Layer();
+var supportLayer = new Kinetic.Layer();
 var numbersMap = {};
 
-function loadGame(stageOffset, transport) {
-    stage.setOffset(stageOffset);
+function loadGame(transport) {
     var fail = function (reason) {
         sessvars.ui.serverFault(reason)
     };
@@ -105,7 +104,11 @@ function loadGame(stageOffset, transport) {
     drawBigPositions(offset);
     drawDozenPositions(offset);
     drawColumnOutsidePositions(offset);
+    loadBalance(supportLayer, supportStage, offset);
+    loadBets(supportLayer, supportStage, offset);
+
     stage.add(layer);
+    supportStage.add(supportLayer);
 }
 function drawZeroPositions(offset) {
     var zerosGroup = new Kinetic.Group({x: 2 * cellWidth + offset.x, y: 0});
@@ -116,8 +119,8 @@ function drawZeroPositions(offset) {
             y: offset.y,
             radius: offset.y,
             angleDeg: 180,
-            fill: greenColor,
-            stroke: whiteColor,
+            fill: sessvars.ui.theme.green,
+            stroke: sessvars.ui.theme.white,
             strokeWidth: 0,
             rotationDeg: -180
         });
@@ -129,7 +132,7 @@ function drawZeroPositions(offset) {
             fontSize: cellTextSize * cellWidth / offset.y,
             fontFamily: window.document.fontFamily,
             fontStyle: 'bold',
-            fill: whiteColor
+            fill: sessvars.ui.theme.white
         });
         text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
         g.add(wedge);
@@ -152,13 +155,14 @@ function drawStraightPositions(offset) {
                 y: i * cellHeight,
                 width: cellWidth,
                 height: cellHeight,
-                fill: greenColor,
-                stroke: whiteColor,
+                fill: sessvars.ui.theme.green,
+                stroke: sessvars.ui.theme.white,
                 strokeWidth: 0
             });
             var ellipse = new Kinetic.Ellipse({
                 x: j * cellWidth + cellWidth / 2,
                 y: i * cellHeight + cellHeight / 2,
+                opacity: 1,
                 radius: {
                     x: cellWidth / 3,
                     y: cellHeight / 3
@@ -171,7 +175,7 @@ function drawStraightPositions(offset) {
                 text: counter,
                 fontSize: cellTextSize,
                 fontFamily: window.document.fontFamily,
-                fill: whiteColor
+                fill: sessvars.ui.theme.white
             });
             text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
 
@@ -215,8 +219,8 @@ function drawBigPositions(offset) {
             y: i * cellHeight * 2,
             width: cellWidth,
             height: cellHeight * 2,
-            fill: greenColor,
-            stroke: whiteColor,
+            fill: sessvars.ui.theme.green,
+            stroke: sessvars.ui.theme.white,
             strokeWidth: 0
         });
         var text = new Kinetic.Text({
@@ -247,8 +251,8 @@ function drawDozenPositions(offset) {
             y: i * cellHeight * 4,
             width: cellWidth,
             height: cellHeight * 4,
-            fill: greenColor,
-            stroke: whiteColor,
+            fill: sessvars.ui.theme.green,
+            stroke: sessvars.ui.theme.white,
             strokeWidth: 0
         });
         var p = OutsidePositions["dozen_" + (i * 12 + 1) + 'to' + ( (i + 1) * 12 )];
@@ -259,7 +263,7 @@ function drawDozenPositions(offset) {
             fontSize: cellTextSize,
             fontFamily: window.document.fontFamily,
             fontStyle: 'bold',
-            fill: whiteColor
+            fill: sessvars.ui.theme.white
         });
         text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
         text.rotateDeg(90);
@@ -279,8 +283,8 @@ function drawColumnOutsidePositions(offset) {
             y: 0,
             width: cellWidth,
             height: cellHeight,
-            fill: greenColor,
-            stroke: whiteColor,
+            fill: sessvars.ui.theme.green,
+            stroke: sessvars.ui.theme.white,
             strokeWidth: 0
         });
         var p = OutsidePositions["column_" + (i + 1)];
@@ -291,7 +295,7 @@ function drawColumnOutsidePositions(offset) {
             fontSize: cellTextSize * 3 / 4,
             fontFamily: window.document.fontFamily,
             fontStyle: 'bold',
-            fill: whiteColor
+            fill: sessvars.ui.theme.white
         });
         text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
 

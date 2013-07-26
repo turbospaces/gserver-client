@@ -9,8 +9,8 @@
 
 <div class="row-fluid">
     <div class="span3"></div>
-    <div class="span3" id="gameContainer1" style="border: 1px coral solid;"></div>
-    <div class="span3" id="gameContainer2" style="border: 1px coral solid;"></div>
+    <div class="span3" id="gameContainer1"></div>
+    <div class="span3" id="gameContainer2"></div>
     <div class="span3">
         <table class="table table-hover table-condensed table-bordered">
             <caption>
@@ -163,26 +163,14 @@
         </div>
     </div>
 </div>
-<div class="row-fluid">
-    <div class="span3"></div>
-    <div class="span6" id="controlsContainer">
-        <div class="row-fluid">
-            <div class="span6">
-                <img src="<c:url value="/resources/img/chip-1-icon.png"/>" height="48" width="48"/>
-                <img src="<c:url value="/resources/img/chip-5-icon.png" />" height="48" width="48"/>
-                <img src="<c:url value="/resources/img/chip-25-icon.png" />" height="48" width="48"/>
-                <img src="<c:url value="/resources/img/chip-50-icon.png" />" height="48" width="48"/>
-                <img src="<c:url value="/resources/img/chip-100-icon.png" />" height="48" width="48"/>
-            </div>
-        </div>
-    </div>
-    <div class="span3"></div>
-</div>
 
 <security:authorize access="isAuthenticated()">
     <script src="<c:url value="/resources/js/application.js" />"></script>
     <script src="<c:url value="/resources/js/transport.js" />"></script>
+    <script src="<c:url value="/resources/js/common/bets.js" />"></script>
+    <script src="<c:url value="/resources/js/common/balance.js" />"></script>
     <script src="<c:url value="/resources/js/games/${game}.js" />"></script>
+
     <script type="text/javascript" defer="defer">
         $("[data-toggle='tooltip']").tooltip();
         $('table.table-condensed tr').each(function () {
@@ -205,7 +193,7 @@
                     transport.login(wsToken);
                     var openGamePlayPromise = transport.openGamePlay(game).done(function (reply) {
                         console.info("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
-                        loadGame({x: 0, y: 0}, transport);
+                        loadGame(transport);
                     }).fail(fail);
                 }
             }, 250);

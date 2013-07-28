@@ -9,17 +9,22 @@
 
 <%@ include file="urls.jsp"%>
 
+<c:set var="bootstrapVersion" value="2.3.2" scope="request"/>
+<c:set var="jqueryVersion" value="1.10.2" scope="request"/>
+<c:set var="soundjsVersion" value="0.4.1" scope="request"/>
+
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" class="fuelux">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <title><tiles:insertAttribute name="title"/></title>
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
     <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
-    <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet" media="screen"/>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/${bootstrapVersion}/css/bootstrap-combined.min.css" rel="stylesheet" media="screen"/>
     <link href="<c:url value="/resources/css/bootstrap-combobox.css" />" rel="stylesheet" media="screen"/>
     <link href="<c:url value="/resources/css/jquery.pnotify.default.css" />" rel="stylesheet" media="screen"/>
+    <link href="<c:url value="/resources/css/application.css" />" rel="stylesheet" media="screen"/>
 
     <tilesx:useAttribute id="styles" name="styles" classname="java.util.List" ignore="true"/>
     <c:forEach var="cssName" items="${styles}">
@@ -32,9 +37,11 @@
     <![endif]-->
 </head>
 <body>
-<script src="<c:url value="/resources/js/jquery.min.js" />"></script>
+<script src="http://code.createjs.com/soundjs-${soundjsVersion}.min.js"></script>
+<script src="http://code.jquery.com/jquery-${jqueryVersion}.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/${bootstrapVersion}/js/bootstrap.min.js"></script>
+
 <script src="<c:url value="/resources/js/jquery.pnotify.min.js" />"></script>
-<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap-combobox.js" />"></script>
 <script src="<c:url value="/resources/js/sessvars.js" />"></script>
 

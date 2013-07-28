@@ -167,11 +167,14 @@
 <security:authorize access="isAuthenticated()">
     <script src="<c:url value="/resources/js/application.js" />"></script>
     <script src="<c:url value="/resources/js/transport.js" />"></script>
+    <script src="<c:url value="/resources/js/common/media.js" />"></script>
     <script src="<c:url value="/resources/js/common/bets.js" />"></script>
     <script src="<c:url value="/resources/js/common/balance.js" />"></script>
     <script src="<c:url value="/resources/js/games/${game}.js" />"></script>
 
     <script type="text/javascript" defer="defer">
+        sessvars.ui.baseURL = "http://localhost:8187/gserver-client/";
+
         $("[data-toggle='tooltip']").tooltip();
         $('table.table-condensed tr').each(function () {
             $(this).find('td:nth-child(1) > button').addClass('btn-link btn-block');
@@ -191,10 +194,12 @@
                 }
                 if (transport.ws.readyState == 1) {
                     transport.login(wsToken);
-                    var openGamePlayPromise = transport.openGamePlay(game).done(function (reply) {
-                        console.info("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
-                        loadGame(transport);
-                    }).fail(fail);
+                    $.when(mediaManager.init()).done(function () {
+                        var openGamePlayPromise = transport.openGamePlay(game).done(function (reply) {
+                            console.info("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
+                            loadGame(transport);
+                        }).fail(fail);
+                    });
                 }
             }, 250);
         });

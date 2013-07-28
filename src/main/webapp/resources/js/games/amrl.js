@@ -104,8 +104,10 @@ function loadGame(transport) {
     drawBigPositions(offset);
     drawDozenPositions(offset);
     drawColumnOutsidePositions(offset);
-    loadBalance(supportLayer, supportStage, offset);
-    loadBets(supportLayer, supportStage, offset);
+
+    var supportWidgetHeight = 2 * cellHeight;
+    balanceUI.init(supportLayer, supportStage, supportWidgetHeight, offset);
+    betsUI.init(supportLayer, supportStage, supportWidgetHeight, {x: offset.x, y: offset.y + supportWidgetHeight});
 
     stage.add(layer);
     supportStage.add(supportLayer);
@@ -130,14 +132,13 @@ function drawZeroPositions(offset) {
             y: offset.y / 2,
             text: p.label,
             fontSize: cellTextSize * cellWidth / offset.y,
-            fontFamily: window.document.fontFamily,
-            fontStyle: 'bold',
+            fontFamily: sessvars.ui.theme.fontFamily,
             fill: sessvars.ui.theme.white
         });
         text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
         g.add(wedge);
         g.add(text);
-        highlightPositionNumber(g);
+        addStraightPositionEvents(g, null);
         zerosGroup.add(g);
         numbersMap[p.numbers[0]] = g;
     }
@@ -149,7 +150,7 @@ function drawStraightPositions(offset) {
     for (var i = 0; i < 12; i++) {
         for (var j = 0; j < 3; j++) {
             counter++;
-            var g = new Kinetic.Group({});
+            var g = new Kinetic.Group();
             var rect = new Kinetic.Rect({
                 x: j * cellWidth,
                 y: i * cellHeight,
@@ -174,7 +175,7 @@ function drawStraightPositions(offset) {
                 y: i * cellHeight + cellHeight / 2,
                 text: counter,
                 fontSize: cellTextSize,
-                fontFamily: window.document.fontFamily,
+                fontFamily: sessvars.ui.theme.fontFamily,
                 fill: sessvars.ui.theme.white
             });
             text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
@@ -182,7 +183,12 @@ function drawStraightPositions(offset) {
             g.add(rect);
             g.add(ellipse);
             g.add(text);
-            highlightPositionNumber(g);
+            var positionWrapper = placeBets(g, cellHeight,
+                {
+                    x: (cellWidth - cellHeight) / 2 + cellWidth * j,
+                    y: cellHeight * i
+                });
+            addStraightPositionEvents(g, positionWrapper);
             numbersGroup.add(g);
             numbersMap[counter] = g;
         }
@@ -229,15 +235,14 @@ function drawBigPositions(offset) {
 
             text: p.label,
             fontSize: cellTextSize * 3 / 4,
-            fontFamily: window.document.fontFamily,
-            fontStyle: 'bold',
+            fontFamily: sessvars.ui.theme.fontFamily,
             fill: p.textColor
         });
         text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
         text.rotateDeg(90);
         g.add(rect);
         g.add(text);
-        highlightPositionNumbers(g, p);
+        addPositionEvents(g, p);
         bigGroup.add(g);
     }
     layer.add(bigGroup);
@@ -261,15 +266,14 @@ function drawDozenPositions(offset) {
             y: i * cellHeight * 4 + cellHeight * 2,
             text: p.label,
             fontSize: cellTextSize,
-            fontFamily: window.document.fontFamily,
-            fontStyle: 'bold',
+            fontFamily: sessvars.ui.theme.fontFamily,
             fill: sessvars.ui.theme.white
         });
         text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
         text.rotateDeg(90);
         g.add(rect);
         g.add(text);
-        highlightPositionNumbers(g, p);
+        addPositionEvents(g, p);
         dozenGroup.add(g);
     }
     layer.add(dozenGroup);
@@ -293,27 +297,29 @@ function drawColumnOutsidePositions(offset) {
             y: cellHeight / 2,
             text: '2 to 1',
             fontSize: cellTextSize * 3 / 4,
-            fontFamily: window.document.fontFamily,
-            fontStyle: 'bold',
+            fontFamily: sessvars.ui.theme.fontFamily,
             fill: sessvars.ui.theme.white
         });
         text.setOffset({x: text.getWidth() / 2, y: text.getHeight() / 2});
 
         g.add(rect);
         g.add(text);
-        highlightPositionNumbers(g, p);
+        addPositionEvents(g, p);
         columnGroup.add(g);
     }
     layer.add(columnGroup);
 }
-function highlightPositionNumber(g) {
+function addStraightPositionEvents(g, positionWrapper) {
     g.on('mouseover', function (event) {
         this.setOpacity(cellMouseOverOpacity);
         document.body.style.cursor = "pointer";
+
+        if (positionWrapper.quantity > 0) {
+            balanceUI.updatePositionBet(positionWrapper.quantity);
+        }
+
         layer.draw();
-    });
-    g.on('mousemove', function (event) {
-        var mouse = stage.getMousePosition();
+        supportLayer.draw();
     });
     g.on('mouseout', function () {
         this.setOpacity(1);
@@ -321,7 +327,7 @@ function highlightPositionNumber(g) {
         layer.draw();
     });
 }
-function highlightPositionNumbers(g, selected) {
+function addPositionEvents(g, selected) {
     g.on('mouseover', function (event) {
         for (var j = 0; j < selected.numbers.length; j++) {
             if (numbersMap.hasOwnProperty(selected.numbers[j])) {
@@ -342,4 +348,29 @@ function highlightPositionNumbers(g, selected) {
         document.body.style.cursor = "default";
         layer.draw();
     });
+}
+function placeBets(g, imageSize, xy) {
+    var positionWrapper = {
+        quantity: 0,
+        img: new Kinetic.Image({image: mediaManager.casinoChipImg}),
+        reset: function () {
+        }
+    };
+
+    g.on('click', function () {
+        console.info(betsUI.selected);
+        if (betsUI.selected) {
+            positionWrapper.quantity += betsUI.selected.quantity;
+            balanceUI.updatePositionBetAndIncrementTotalBet(positionWrapper.quantity, betsUI.selected.quantity);
+            mediaManager.placeBet();
+            positionWrapper.img.setX(xy.x);
+            positionWrapper.img.setY(xy.y);
+            positionWrapper.img.setWidth(imageSize);
+            positionWrapper.img.setHeight(imageSize);
+            g.add(positionWrapper.img);
+            layer.draw();
+            supportLayer.draw();
+        }
+    });
+    return positionWrapper;
 }

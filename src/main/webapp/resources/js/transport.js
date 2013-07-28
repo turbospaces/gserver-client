@@ -79,6 +79,8 @@ function Transport(wsToken) {
             sessvars.ui.game.id = gameId;
             sessvars.ui.game.betLimits = replyCmd.betLimits;
             sessvars.ui.game.coins = replyCmd.coins;
+            sessvars.ui.user.balance = replyCmd.balance;
+            sessvars.ui.user.displayName = replyCmd.displayName;
         });
         return promise;
     };

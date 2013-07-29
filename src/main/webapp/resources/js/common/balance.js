@@ -2,7 +2,7 @@ var balanceUI = {
     txtTotalBetAmount: null,
     txtBalanceAmount: null,
     txtPositionBetAmount: null,
-    txtPositionMaxLimit: null,
+    txtPositionReturnAmount: null,
 
     updateBalance: function (amount) {
         this.txtBalanceAmount.setText(amount);
@@ -13,10 +13,11 @@ var balanceUI = {
         this.txtTotalBetAmount.setText(delta + bet);
         this.txtTotalBetAmount.setOffset({x: this.txtTotalBetAmount.getWidth() / 2, y: this.txtTotalBetAmount.getHeight() / 2});
     },
-    updatePositionBet: function (amount) {
+    updatePositionBet: function (amount, returnAmount) {
         this.updatePositionBetAndIncrementTotalBet(amount, 0);
+        this.txtPositionReturnAmount.setText(returnAmount);
     },
-    updatePositionBetAndIncrementTotalBet: function (amount, delta) {
+    updatePositionBetAndIncrementTotalBet: function (amount , delta) {
         this.txtPositionBetAmount.setText(amount);
         this.txtPositionBetAmount.setOffset({x: this.txtPositionBetAmount.getWidth() / 2, y: this.txtPositionBetAmount.getHeight() / 2});
         this.incrementTotalBet(delta);
@@ -35,10 +36,10 @@ var balanceUI = {
         var g2 = new Kinetic.Group({x: offset.x, y: offset.y + widgetHeight * 2});
         var f2 = sessvars.ui.form(g2, {width: group.getWidth(), height: widgetHeight}, [
             {lblText: 'Position Bet', valueText: '0'},
-            {lblText: 'Max Limit', valueText: 'BB'}
+            {lblText: 'Return', valueText: '0'}
         ]);
         balanceUI.txtPositionBetAmount = f2[0][1];
-        balanceUI.txtPositionMaxLimit = f2[1][1];
+        balanceUI.txtPositionReturnAmount = f2[1][1];
 
         layer.add(g2);
     }

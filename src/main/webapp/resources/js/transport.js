@@ -35,7 +35,7 @@ function Transport(wsToken) {
             commands.counter++;
 
             return promise;
-        }
+        };
     })(this.commands, this.ws);
     this.getRoulettePositionsInfo = function () {
         var cmd = {

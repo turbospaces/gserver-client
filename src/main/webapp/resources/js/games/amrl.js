@@ -84,33 +84,35 @@ var supportStage = new Kinetic.Stage({
 var layer = new Kinetic.Layer();
 var supportLayer = new Kinetic.Layer();
 var numbersMap = {};
+var positionPayouts = {};
 
 function loadGame(transport) {
     var fail = function (reason) {
         sessvars.ui.serverFault(reason)
     };
 
-    transport.getRoulettePositionsInfo().done(function (reply) {
+    var promise1 = transport.getRoulettePositionsInfo().done(function (reply) {
         var positions = reply["gserver.games.roulette.GetRoulettePositionInfoReply.cmd"].positions;
         for (var i = 0; i < positions.length; i++) {
-            var name = positions[i].name;
-            var payout = positions[i].payout;
+            positionPayouts[positions[i].name] = positions[i].payout;
         }
     }).fail(fail);
 
-    var offset = {x: 0, y: zeroRadius};
-    drawZeroPositions(offset);
-    drawStraightPositions(offset);
-    drawBigPositions(offset);
-    drawDozenPositions(offset);
-    drawColumnOutsidePositions(offset);
+    $.when(promise1).done(function () {
+        var offset = {x: 0, y: zeroRadius};
+        drawZeroPositions(offset);
+        drawStraightPositions(offset);
+        drawBigPositions(offset);
+        drawDozenPositions(offset);
+        drawColumnOutsidePositions(offset);
 
-    var supportWidgetHeight = 2 * cellHeight;
-    balanceUI.init(supportLayer, supportStage, supportWidgetHeight, offset);
-    betsUI.init(supportLayer, supportStage, supportWidgetHeight, {x: offset.x, y: offset.y + supportWidgetHeight});
+        var supportWidgetHeight = 2 * cellHeight;
+        balanceUI.init(supportLayer, supportStage, supportWidgetHeight, offset);
+        betsUI.init(supportLayer, supportStage, supportWidgetHeight, {x: offset.x, y: offset.y + supportWidgetHeight});
 
-    stage.add(layer);
-    supportStage.add(supportLayer);
+        stage.add(layer);
+        supportStage.add(supportLayer);
+    });
 }
 function drawZeroPositions(offset) {
     var zerosGroup = new Kinetic.Group({x: 2 * cellWidth + offset.x, y: 0});
@@ -151,6 +153,7 @@ function drawStraightPositions(offset) {
         for (var j = 0; j < 3; j++) {
             counter++;
             var g = new Kinetic.Group();
+            var position = StraightPositions["number_" + counter];
             var rect = new Kinetic.Rect({
                 x: j * cellWidth,
                 y: i * cellHeight,
@@ -168,7 +171,7 @@ function drawStraightPositions(offset) {
                     x: cellWidth / 3,
                     y: cellHeight / 3
                 },
-                fill: StraightPositions["number_" + counter].bgColor
+                fill: position.bgColor
             });
             var text = new Kinetic.Text({
                 x: j * cellWidth + cellWidth / 2,
@@ -183,7 +186,8 @@ function drawStraightPositions(offset) {
             g.add(rect);
             g.add(ellipse);
             g.add(text);
-            var positionWrapper = placeBets(g, cellHeight,
+            var positionWrapper = placeBets(position, g,
+                cellHeight,
                 {
                     x: (cellWidth - cellHeight) / 2 + cellWidth * j,
                     y: cellHeight * i
@@ -314,8 +318,14 @@ function addStraightPositionEvents(g, positionWrapper) {
         this.setOpacity(cellMouseOverOpacity);
         document.body.style.cursor = "pointer";
 
-        if (positionWrapper.quantity > 0) {
-            balanceUI.updatePositionBet(positionWrapper.quantity);
+        if (positionWrapper) {
+            if (positionWrapper.quantity > 0) {
+                console.info(positionPayouts[positionWrapper.position]);
+                balanceUI.updatePositionBet(
+                    positionWrapper.quantity,
+                    Number(positionPayouts[positionWrapper.position] * positionWrapper.quantity)
+                );
+            }
         }
 
         layer.draw();
@@ -349,9 +359,10 @@ function addPositionEvents(g, selected) {
         layer.draw();
     });
 }
-function placeBets(g, imageSize, xy) {
+function placeBets(pos, g, imageSize, xy) {
     var positionWrapper = {
         quantity: 0,
+        position: pos,
         img: new Kinetic.Image({image: mediaManager.casinoChipImg}),
         reset: function () {
         }

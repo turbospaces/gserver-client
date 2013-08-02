@@ -182,26 +182,20 @@
             $(this).find('td:nth-child(3) > span').addClass('badge badge-important');
         });
         $.getJSON('${getWSUrl}', function (wsToken) {
-            var transport = new Transport(wsToken);
             var game = "${game}";
             var fail = function (reason) {
                 sessvars.ui.serverFault(reason)
             };
-
-            setTimeout(function () {
-                if (transport.ws.readyState == 0) {
-                    console.warn('still waiting for web-socket connect');
-                }
-                if (transport.ws.readyState == 1) {
-                    transport.login(wsToken);
-                    $.when(mediaManager.init()).done(function () {
-                        var openGamePlayPromise = transport.openGamePlay(game).done(function (reply) {
-                            console.info("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
-                            loadGame(transport);
-                        }).fail(fail);
-                    });
-                }
-            }, 250);
+            //ws connection
+            var transport = new Transport(wsToken, function () {
+                transport.login(wsToken);
+                $.when(mediaManager.init()).done(function () {
+                    transport.openGamePlay(game).done(function (reply) {
+                        console.info("GamePlay session=%s has been created=%s", sessvars.ui.sessionId, JSON.stringify(sessvars.ui.game));
+                        loadGame(transport);
+                    }).fail(fail);
+                });
+            });
         });
     </script>
 </security:authorize>

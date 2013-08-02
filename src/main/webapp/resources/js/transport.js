@@ -1,4 +1,4 @@
-function Transport(wsToken) {
+function Transport(wsToken, connectCallback) {
     this.commands = {counter: 1, correlation: {}};
     this.ws = new WebSocket(wsToken.url);
 
@@ -21,14 +21,13 @@ function Transport(wsToken) {
                 "sequenceNumber": commands.counter,
                 "messageTimestamp": new Date().getTime()
             };
-            cmd["protocolVersion"] = "0.1";
             cmd["debug"] = sessvars.ui.transport.debugOnServer;
             if (sessvars.ui.sessionId) {
                 cmd["sessionId"] = sessvars.ui.sessionId;
             }
             var msg = JSON.stringify(cmd);
             if (sessvars.ui.transport.debugOnClient) {
-                console.debug("sending ws message(%s)={%s}", cmd.headers.correlationID, msg);
+                console.debug("WebSockets[OUT] ==> message(%s)={%s}", cmd.headers.correlationID, msg);
             }
             ws.send(msg);
             commands.correlation[cmd.headers.correlationID] = def;
@@ -58,6 +57,10 @@ function Transport(wsToken) {
         var cmd = {
             "qualifier": "gserver.LoginCommand",
             "gserver.LoginCommand.cmd": {
+                "protocolVersion": {
+                    "major": 0,
+                    "minor": 1
+                },
                 "token": wsToken.token,
                 "lang": window.navigator.language,
                 "clientPlatform": window.navigator.userAgent
@@ -85,27 +88,34 @@ function Transport(wsToken) {
         return promise;
     };
     this.ws.onopen = function () {
+        connectCallback()
     };
     this.ws.onclose = function () {
     };
     this.ws.onmessage = (function (commands) {
         return function (event) {
-            var msg = JSON.parse(event.data);
-            var correlationID = msg.headers.correlationID;
+            try {
+                var msg = JSON.parse(event.data);
+                var correlationID = msg.headers.correlationID;
+                console.trace("WebSockets[IN] <== %s", event.data);
 
-            if (commands.correlation.hasOwnProperty(correlationID)) {
-                var def = commands.correlation[correlationID];
-                delete commands.correlation[correlationID];
+                if (commands.correlation.hasOwnProperty(correlationID)) {
+                    var def = commands.correlation[correlationID];
+                    delete commands.correlation[correlationID];
 
-                if (msg.qualifier.indexOf('Exception') != -1) {
-                    console.warn("received ws fault(%s)=%s", correlationID, event.data);
-                    def.reject(msg);
-                } else {
-                    if (sessvars.ui.transport.debugOnClient) {
-                        console.debug("received ws message(%s)=%s", correlationID, event.data);
+                    if (msg.qualifier.indexOf('Exception') != -1) {
+                        console.warn("received ws fault(%s)=%s", correlationID, event.data);
+                        def.reject(msg);
+                    } else {
+                        if (sessvars.ui.transport.debugOnClient) {
+                            console.debug("received ws message(%s)=%s", correlationID, event.data);
+                        }
+                        def.resolve(msg);
                     }
-                    def.resolve(msg);
                 }
+            } catch (err) {
+                console.error(err);
+                //sessvars.ui.serverFault(err);
             }
         }
     })(this.commands);
